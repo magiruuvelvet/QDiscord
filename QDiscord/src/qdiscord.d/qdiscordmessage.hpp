@@ -66,15 +66,8 @@ public:
 	QDiscordGuild* guild() const;
 	///\brief Returns a list of users mentioned in this message.
 	QList<QDiscordUser*> mentions() const { return _mentions.keys();}
-	/*!
-	 * \brief Returns a list of users mentioned in this message and whether
-	 * this class owns the user object.
-	 *
-	 * This is only really useful if you want to determine whether you should
-	 * deep-copy the user object, which is why this method exists.
-	 */
-	QMap<QDiscordUser*, bool> mentionsWithOwnership() const { return _mentions;}
 private:
+	QMap<QDiscordUser*, bool> mentionsWithOwnership() const { return _mentions;}
 	QString _id;
 	QString _content;
 	QDateTime _timestamp;
