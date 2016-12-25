@@ -41,8 +41,9 @@ QDiscordChannel::QDiscordChannel(const QJsonObject& object,
 					new QDiscordUser(object["recipient"].toObject())
 				) : QSharedPointer<QDiscordUser>();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordChannel("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordChannel("<<this<<") constructed";
+#endif
 }
 
 QDiscordChannel::QDiscordChannel()
@@ -57,8 +58,9 @@ QDiscordChannel::QDiscordChannel()
 	_guild = QSharedPointer<QDiscordGuild>();
 	_recipient = QSharedPointer<QDiscordUser>();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordChannel("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordChannel("<<this<<") constructed";
+#endif
 }
 
 QDiscordChannel::QDiscordChannel(const QDiscordChannel& other)

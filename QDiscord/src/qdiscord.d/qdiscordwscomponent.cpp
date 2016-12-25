@@ -39,8 +39,9 @@ QDiscordWsComponent::QDiscordWsComponent(QObject* parent) : QObject(parent)
 	_maxReconnectAttempts = -1;
 	initDispatchTable();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"constructed";
+#endif
 }
 
 void QDiscordWsComponent::connectToEndpoint(const QString& endpoint,
@@ -52,8 +53,9 @@ void QDiscordWsComponent::connectToEndpoint(const QString& endpoint,
 	_token = token;
 	_socket.open(endpoint);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"connecting to"<<endpoint;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"connecting to"<<endpoint;
+#endif
 }
 
 void QDiscordWsComponent::close()
@@ -128,14 +130,16 @@ void QDiscordWsComponent::reconnect()
 	if(_gateway == "")
 		return;
 
-	if (QDiscordUtilities::debugMode)
-		qDebug()<<this<<"reconnecting";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"reconnecting";
+#endif
 
 	if(_reconnectAttempts > _maxReconnectAttempts &&
 			_maxReconnectAttempts != -1)
 	{
-		if(QDiscordUtilities::debugMode)
-			qDebug()<<"maximum reconnect attempts reached, stopping";
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<"maximum reconnect attempts reached, stopping";
+#endif
 
 		_reconnectAttempts = 0;
 		close();
@@ -157,19 +161,19 @@ void QDiscordWsComponent::connected_()
 	emit connected();
 	login(_token);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"connected, logging in";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"connected, logging in";
+#endif
 }
 
 void QDiscordWsComponent::disconnected_()
 {
 	emit disconnected(_socket.closeReason(), _socket.closeCode());
 
-	if(QDiscordUtilities::debugMode)
-	{
-		qDebug()<<this<<"disconnected: \""<<
-				  _socket.closeReason()<<"\":"<<_socket.closeCode();
-	}
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"disconnected: \""<<
+			  _socket.closeReason()<<"\":"<<_socket.closeCode();
+#endif
 
 	_heartbeatTimer.stop();
 	if(_tryReconnecting)
@@ -195,8 +199,9 @@ void QDiscordWsComponent::error_(QAbstractSocket::SocketError err)
 		_gateway = "";
 		emit loginFailed();
 
-		if(QDiscordUtilities::debugMode)
-			qDebug()<<this<<"login failed: "<<err;
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"login failed: "<<err;
+#endif
 	}
 }
 
@@ -213,24 +218,31 @@ void QDiscordWsComponent::textMessageReceived(const QString& message)
 		file.close();
 	}
 
-	if(QDiscordUtilities::debugMode)
+#ifdef QDISCORD_LIBRARY_DEBUG
 		qDebug()<<this<<"op:"<<object["op"].toInt()<<" t:"<<object["t"].toString();
+#endif
 
 	switch(object["op"].toInt(-1))
 	{
 	case 0:
 		if(_eventDispatchTable.keys().contains(object["t"].toString()))
 			_eventDispatchTable[object["t"].toString()](object["d"].toObject());
-		else if(QDiscordUtilities::debugMode)
+#ifdef QDISCORD_LIBRARY_DEBUG
+		else
 			qDebug()<<this<<"encountered an event not in the dispatch table";
+#endif
 		break;
 	case -1:
-		if(QDiscordUtilities::debugMode)
-			qDebug()<<this<<"error while parsing operation code";
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"error while parsing operation code";
+#endif
 		break;
 	default:
-		if(QDiscordUtilities::debugMode)
-			qDebug()<<this<<"encountered an unhandled operation";
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"encountered an unhandled operation";
+#else
+		;
+#endif
 	}
 }
 
@@ -243,8 +255,9 @@ void QDiscordWsComponent::heartbeat()
 	document.setObject(object);
 	_socket.sendTextMessage(document.toJson(QJsonDocument::Compact));
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"heartbeat sent";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"heartbeat sent";
+#endif
 }
 
 void QDiscordWsComponent::initDispatchTable()
@@ -253,9 +266,10 @@ void QDiscordWsComponent::initDispatchTable()
 		{"READY", [&](const QJsonObject& dataObject){
 			 _heartbeatTimer.start(dataObject["heartbeat_interval"].toInt());
 
-			 if (QDiscordUtilities::debugMode)
-				 qDebug()<<this<<"beating every "<<
+#ifdef QDISCORD_LIBRARY_DEBUG
+			qDebug()<<this<<"beating every "<<
 			 _heartbeatTimer.interval()/1000.<<" seconds";
+#endif
 
 			 _tryReconnecting = true;
 			 _reconnectAttempts = 0;

@@ -29,8 +29,9 @@ QDiscordUser::QDiscordUser(const QJsonObject& object)
 	_verified = object["verified"].toBool(false);
 	_avatar = object["avatar"].toString("");
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordUser("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordUser("<<this<<") constructed";
+#endif
 }
 
 QDiscordUser::QDiscordUser()
@@ -43,8 +44,9 @@ QDiscordUser::QDiscordUser()
 	_verified = false;
 	_avatar = "";
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordUser("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordUser("<<this<<") constructed";
+#endif
 }
 
 void QDiscordUser::update(const QJsonObject& object)
@@ -64,8 +66,9 @@ void QDiscordUser::update(const QJsonObject& object)
 	if(object.contains("avatar"))
 		_avatar = object["avatar"].toString("");
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordUser("<<this<<") updated";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordUser("<<this<<") updated";
+#endif
 }
 
 bool QDiscordUser::operator ==(const QDiscordUser& other) const

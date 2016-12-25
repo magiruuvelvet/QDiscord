@@ -18,18 +18,33 @@
 
 #include "qdiscordutilities.hpp"
 
-//--------------------------------------------------------------------------------------
-//-----------------------LIBRARY CONFIGURATION------------------------------------------
-//--------------------------------------------------------------------------------------
-QString QDiscordUtilities::botName = "QDiscordBot";
+#ifdef QDISCORD_BOT_NAME
+const QString QDiscordUtilities::botName = QDISCORD_BOT_NAME;
+#else
+const QString QDiscordUtilities::botName = "QDiscordBot";
+#endif
+#ifdef QDISCORD_LIBRARY_NAME
+const QString QDiscordUtilities::libName = QDISCORD_LIBRARY_NAME;
+#else
 const QString QDiscordUtilities::libName = "QDiscord";
+#endif
+#ifdef QDISCORD_LIBRARY_LINK
+const QString QDiscordUtilities::libLink = QDISCORD_LIBRARY_LINK;
+#else
 const QString QDiscordUtilities::libLink = "https://github.com/george99g/QDiscord";
+#endif
+#ifdef QDISCORD_LIBRARY_MAJOR
+const QString QDiscordUtilities::libMajor = QDISCORD_LIBRARY_MAJOR;
+#else
 const QString QDiscordUtilities::libMajor = "0";
+#endif
+#ifdef QDISCORD_LIBRARY_MINOR
+const QString QDiscordUtilities::libMinor = QDISCORD_LIBRARY_MINOR;
+#else
 const QString QDiscordUtilities::libMinor = "8";
-const bool QDiscordUtilities::debugMode = getenv("QDISCORD_DEBUG")!=NULL?true:false;
-//--------------------------------------------------------------------------------------
+#endif
 
-const struct QDiscordUtilities::EndPoints QDiscordUtilities::endPoints =
+const QDiscordUtilities::EndPoints QDiscordUtilities::endPoints =
 {
 	"https://discordapp.com",
 	"https://discordapp.com/api",
@@ -43,7 +58,7 @@ const struct QDiscordUtilities::EndPoints QDiscordUtilities::endPoints =
 	"https://discordapp.com/api/channels"
 };
 
-QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkError error)
+const QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkError error)
 {
 	switch((int)error)
 	{

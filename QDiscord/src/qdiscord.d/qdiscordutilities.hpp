@@ -23,10 +23,9 @@
 #include <QNetworkReply>
 #include <stdlib.h>
 
-///\brief A class containing configuration variables and static functions used in QDiscord.
-class QDiscordUtilities
+///\brief A namespace containing configuration variables and functions used in QDiscord.
+namespace QDiscordUtilities
 {
-public:
 	///\brief A struct used for storing the Discord API endpoints.
 	struct EndPoints
 	{
@@ -41,7 +40,7 @@ public:
 		QString servers;  ///<\brief The servers endpoint.
 		QString channels; ///<\brief The channels endpoint.
 	};
-	const static EndPoints endPoints;
+	extern const EndPoints endPoints;
 	/*!
 	 * \brief Converts network errors to a human-readable string based on Discord documentation.
 	 *
@@ -49,30 +48,29 @@ public:
 	 * \param error The network error returned by a failed method.
 	 * \return A human-readable string to help explain the reason for failure.
 	 */
-	static QString networkErrorToString(QNetworkReply::NetworkError error);
+	extern const QString networkErrorToString(QNetworkReply::NetworkError error);
 	/*!
 	 * \brief The library name.
 	 *
 	 * This should always be QDiscord, unless you fork the project and change the name.
 	 */
-	const static QString libName;
+	extern const QString libName;
 	/*!
 	 * \brief The name of the bot this library will be used for.
 	 *
 	 * This should always be changed to your bot's name.
 	 */
-	static QString botName;
+	extern const QString botName;
 	///\brief The major version of the library.
-	const static QString libMajor;
+	extern const QString libMajor;
 	/*!
 	 * \brief The minor version of the library.
 	 *
 	 * This should be incremented with each update of the library.
 	 */
-	const static QString libMinor;
+	extern const QString libMinor;
 	///\brief A link to where the library repository is located.
-	const static QString libLink;
-	const static bool debugMode;
-};
+	extern const QString libLink;
+}
 
 #endif // QDISCORDUTILITIES_HPP

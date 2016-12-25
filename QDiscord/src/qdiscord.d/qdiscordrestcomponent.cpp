@@ -24,8 +24,9 @@ QDiscordRestComponent::QDiscordRestComponent(QObject* parent) : QObject(parent)
 	_authentication = "";
 	_self = QSharedPointer<QDiscordUser>();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"constructed";
+#endif
 }
 
 void QDiscordRestComponent::login(const QString& email, const QString& password)
@@ -589,8 +590,9 @@ void QDiscordRestComponent::deleteResource(const QUrl& url,
 	request.setRawHeader("User-Agent", userAgent.toUtf8());
 	connect(_manager.deleteResource(request), &QNetworkReply::finished,
 			this, function);
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"DELETE to "<<url;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"DELETE to "<<url;
+#endif
 }
 
 void QDiscordRestComponent::patch(const QJsonObject &object, const QUrl &url, std::function<void ()> function)
@@ -615,8 +617,9 @@ void QDiscordRestComponent::patch(const QJsonObject &object, const QUrl &url, st
 	connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
 	connect(reply, &QNetworkReply::finished, this, function);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"patch: "<<object<<" to "<<url;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"patch: "<<object<<" to "<<url;
+#endif
 }
 
 void QDiscordRestComponent::patch(const QJsonArray &array, const QUrl &url, std::function<void ()> function)
@@ -641,8 +644,9 @@ void QDiscordRestComponent::patch(const QJsonArray &array, const QUrl &url, std:
 	connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
 	connect(reply, &QNetworkReply::finished, this, function);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"patch: "<<array<<" to "<<url;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"patch: "<<array<<" to "<<url;
+#endif
 }
 
 void QDiscordRestComponent::post(const QJsonObject& object,
@@ -664,8 +668,9 @@ void QDiscordRestComponent::post(const QJsonObject& object,
 			_manager.post(request, document.toJson(QJsonDocument::Compact));
 	connect(reply, &QNetworkReply::finished, this, function);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"posted: "<<object<<" to "<<url;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"posted: "<<object<<" to "<<url;
+#endif
 }
 
 void QDiscordRestComponent::post(const QJsonArray& array,
@@ -687,8 +692,9 @@ void QDiscordRestComponent::post(const QJsonArray& array,
 			_manager.post(request, document.toJson(QJsonDocument::Compact));
 	connect(reply, &QNetworkReply::finished, this, function);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"posted: "<<array<<" to "<<url;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"posted: "<<array<<" to "<<url;
+#endif
 }
 
 void QDiscordRestComponent::get(const QUrl& url,
@@ -705,6 +711,7 @@ void QDiscordRestComponent::get(const QUrl& url,
 	QNetworkReply* reply = _manager.get(request);
 	connect(reply, &QNetworkReply::finished, this, function);
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"GET to "<<url;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"GET to "<<url;
+#endif
 }

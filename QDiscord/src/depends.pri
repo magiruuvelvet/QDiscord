@@ -1,3 +1,5 @@
+include(config.pri)
+
 SOURCES += $$PWD/qdiscord.d/qdiscord.cpp \
     $$PWD/qdiscord.d/qdiscordrestcomponent.cpp \
     $$PWD/qdiscord.d/qdiscordutilities.cpp \

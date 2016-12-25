@@ -59,8 +59,9 @@ QDiscordMessage::QDiscordMessage(const QJsonObject& object,
 		}
 	}
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordMessage("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMessage("<<this<<") constructed";
+#endif
 }
 
 QDiscordMessage::QDiscordMessage()
@@ -74,8 +75,9 @@ QDiscordMessage::QDiscordMessage()
 	_tts = false;
 	_timestamp = QDateTime();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordMessage("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMessage("<<this<<") constructed";
+#endif
 }
 
 QDiscordMessage::QDiscordMessage(const QDiscordMessage& other)

@@ -23,8 +23,9 @@ QDiscord::QDiscord(QObject* parent) : QObject(parent)
 	connectComponents();
 	_signalsConnected = false;
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"constructed";
+#endif
 }
 
 void QDiscord::login(const QString& email, const QString& password)

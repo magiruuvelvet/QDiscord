@@ -34,8 +34,9 @@ QDiscordMember::QDiscordMember(const QJsonObject& object,
 				) :
 				QSharedPointer<QDiscordUser>();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordMember("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMember("<<this<<") constructed";
+#endif
 }
 
 QDiscordMember::QDiscordMember()
@@ -47,8 +48,9 @@ QDiscordMember::QDiscordMember()
 	_user = QSharedPointer<QDiscordUser>();
 	_guild = QSharedPointer<QDiscordGuild>();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordMember("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMember("<<this<<") constructed";
+#endif
 }
 
 QDiscordMember::QDiscordMember(const QDiscordMember& other)
@@ -81,8 +83,9 @@ void QDiscordMember::update(const QJsonObject& object,
 	if(_user)
 		_user->update(object["user"].toObject());
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordMember("<<this<<") updated";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMember("<<this<<") updated";
+#endif
 }
 
 bool QDiscordMember::operator ==(const QDiscordMember& other) const

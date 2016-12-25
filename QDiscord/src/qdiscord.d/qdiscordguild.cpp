@@ -46,8 +46,9 @@ QDiscordGuild::QDiscordGuild(const QJsonObject& object)
 		_channels.insert(channel->id(), channel);
 	}
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordGuild("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordGuild("<<this<<") constructed";
+#endif
 }
 
 QDiscordGuild::QDiscordGuild(const QDiscordGuild& other):
@@ -81,8 +82,9 @@ QDiscordGuild::QDiscordGuild()
 	_memberCount = 0;
 	_joinedAt = QDateTime();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<"QDiscordGuild("<<this<<") constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordGuild("<<this<<") constructed";
+#endif
 }
 
 void QDiscordGuild::addChannel(QSharedPointer<QDiscordChannel> channel)

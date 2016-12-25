@@ -23,8 +23,9 @@ QDiscordStateComponent::QDiscordStateComponent(QObject* parent)
 {
 	_self = QSharedPointer<QDiscordUser>();
 
-	if(QDiscordUtilities::debugMode)
-		qDebug()<<this<<"constructed";
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"constructed";
+#endif
 }
 
 QDiscordStateComponent::~QDiscordStateComponent()
@@ -158,20 +159,24 @@ void QDiscordStateComponent::guildMemberUpdateReceived(const QJsonObject& object
 			memberPtr->update(object, guildPtr);
 			emit guildMemberUpdated(memberPtr);
 		}
+#ifdef QDISCORD_LIBRARY_DEBUG
 		else
-			if(QDiscordUtilities::debugMode)
-			{
-				qDebug()<<this<<
-				"DESYNC: Member update received but member is not stored in guild.\n"
-				"Member ID: "+object["user"].toObject()["id"].toString("")+"\n"
-				"Guild ID: "+guildPtr->id();
-			}
-	}
-	else
-		if(QDiscordUtilities::debugMode)
+		{
 			qDebug()<<this<<
-			"DESYNC: Member update received but guild is not stored in state.\n"
-			"Guild ID: "+object["guild_id"].toString("");
+			"DESYNC: Member update received but member is not stored in guild.\n"
+			"Member ID: "+object["user"].toObject()["id"].toString("")+"\n"
+			"Guild ID: "+guildPtr->id();
+		}
+#endif
+	}
+#ifdef QDISCORD_LIBRARY_DEBUG
+	else
+	{
+		qDebug()<<this<<
+		"DESYNC: Member update received but guild is not stored in state.\n"
+		"Guild ID: "+object["guild_id"].toString("");
+	}
+#endif
 }
 
 void QDiscordStateComponent::guildRoleCreateReceived(const QJsonObject& object)
