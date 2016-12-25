@@ -21,7 +21,7 @@
 
 #include <QString>
 #include <QNetworkReply>
-#include <stdlib.h>
+#include <QDateTime>
 
 ///\brief A namespace containing configuration variables and functions used in QDiscord.
 namespace QDiscordUtilities
@@ -48,7 +48,10 @@ namespace QDiscordUtilities
 	 * \param error The network error returned by a failed method.
 	 * \return A human-readable string to help explain the reason for failure.
 	 */
-	extern const QString networkErrorToString(QNetworkReply::NetworkError error);
+	QString networkErrorToString(QNetworkReply::NetworkError error);
+	///\brief Returns the DateTime a Discord snowflake was generated.
+	QDateTime snowflakeTime(QString snowflake);
+	extern const qlonglong discordEpoch;
 	/*!
 	 * \brief The library name.
 	 *

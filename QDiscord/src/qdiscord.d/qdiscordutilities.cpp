@@ -18,6 +18,8 @@
 
 #include "qdiscordutilities.hpp"
 
+const qlonglong QDiscordUtilities::discordEpoch = 1420070400000;
+
 #ifdef QDISCORD_BOT_NAME
 const QString QDiscordUtilities::botName = QDISCORD_BOT_NAME;
 #else
@@ -58,7 +60,7 @@ const QDiscordUtilities::EndPoints QDiscordUtilities::endPoints =
 	"https://discordapp.com/api/channels"
 };
 
-const QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkError error)
+QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkError error)
 {
 	switch((int)error)
 	{
@@ -87,4 +89,11 @@ const QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkErro
 			return "5xx (SERVER ERROR): The server had an error processing your request.";
 		else return "xxx (UNKNOWN): Unknown error.";
 	}
+}
+
+QDateTime QDiscordUtilities::snowflakeTime(QString snowflake)
+{
+	return QDateTime::fromTime_t(
+					((snowflake.toLongLong() >> 22) + discordEpoch) / 1000
+				);
 }
