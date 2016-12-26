@@ -51,6 +51,7 @@ namespace QDiscordUtilities
 	QString networkErrorToString(QNetworkReply::NetworkError error);
 	///\brief Returns the DateTime a Discord snowflake was generated.
 	QDateTime snowflakeTime(QString snowflake);
+	///\brief Discord's epoch value for snowflake generation.
 	extern const qlonglong discordEpoch;
 	/*!
 	 * \brief The library name.

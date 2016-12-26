@@ -112,7 +112,7 @@ void QDiscord::connectComponents()
 	connect(&_ws, &QDiscordWsComponent::error,
 			&_state, &QDiscordStateComponent::clear);
 	connect(&_state, &QDiscordStateComponent::selfCreated,
-			&_rest, &QDiscordRestComponent::selfCreated);
+			&_rest, &QDiscordRestComponent::setSelf);
 
 }
 

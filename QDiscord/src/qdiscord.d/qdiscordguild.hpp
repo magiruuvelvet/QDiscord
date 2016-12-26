@@ -25,7 +25,6 @@
 #include <QJsonArray>
 #include "qdiscordmember.hpp"
 #include "qdiscordchannel.hpp"
-#include "qdiscordutilities.hpp"
 
 ///\brief Represents a guild in the Discord API.
 class QDiscordGuild : public QEnableSharedFromThis<QDiscordGuild>

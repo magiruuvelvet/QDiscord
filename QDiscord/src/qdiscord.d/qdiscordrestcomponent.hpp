@@ -30,8 +30,6 @@
 #include "qdiscordchannel.hpp"
 #include "qdiscorduser.hpp"
 
-class QDiscord;
-
 /*!
  * \brief The REST component of QDiscord.
  *
@@ -39,7 +37,6 @@ class QDiscord;
  */
 class QDiscordRestComponent : public QObject
 {
-	friend class QDiscord;
 	Q_OBJECT
 public:
 	///\brief Standard QObject constructor.
@@ -113,7 +110,8 @@ public:
 							 QSharedPointer<QDiscordChannel> channel);
 	///\brief Changes the user limit of the voice channel with the specified ID.
 	void setChannelUserLimit(int limit, const QString& channelId);
-
+	///\brief Sets the user belonging to this client.
+	void setSelf(QSharedPointer<QDiscordUser> self);
 signals:
 	/*!
 	 * \brief Emitted when a WebSocket endpoint has successfully been acquired.
@@ -169,7 +167,6 @@ signals:
 	 */
 	void channelUpdateFailed(QNetworkReply::NetworkError error);
 private:
-	void selfCreated(QSharedPointer<QDiscordUser> self);
 	void deleteResource(const QUrl& url, std::function<void()> function);
 	void patch(const QJsonObject& object, const QUrl& url, std::function<void()> function);
 	void patch(const QJsonArray& array, const QUrl& url, std::function<void ()> function);

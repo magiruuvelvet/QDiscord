@@ -21,7 +21,6 @@
 
 #include <QJsonObject>
 #include <QDebug>
-#include "qdiscordutilities.hpp"
 
 ///\brief Represents a game. Used in statuses.
 class QDiscordGame

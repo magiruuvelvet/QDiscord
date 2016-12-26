@@ -572,7 +572,7 @@ void QDiscordRestComponent::setChannelUserLimit(int limit,
 	});
 }
 
-void QDiscordRestComponent::selfCreated(QSharedPointer<QDiscordUser> self)
+void QDiscordRestComponent::setSelf(QSharedPointer<QDiscordUser> self)
 {
 	_self = self;
 }
