@@ -58,8 +58,10 @@ public:
 	 * This might cause issues if you are manually interfacing with the components, in which case
 	 * it is recommended to not call this and instead log in manually.
 	 * \param token The token to use.
+	 * \param tokenType Specifies the type of the provided token.
 	 */
-	void login(const QString& token);
+	void login(const QString& token,
+			   QDiscordTokenType tokenType = QDiscordTokenType::Bot);
 	///\brief Handles logging out from the Discord API and destroying any state information in memory.
 	void logout();
 	///\brief Returns a pointer to the REST component.
@@ -86,7 +88,7 @@ signals:
 	 */
 	void disconnected();
 private:
-	void tokenVerfified(const QString& token);
+	void tokenVerfified(const QString& token, QDiscordTokenType tokenType);
 	void endpointAcquired(const QString& endpoint);
 	void connectComponents();
 	void connectDiscordSignals();
@@ -95,6 +97,7 @@ private:
 	void loginSuccessRecevied();
 	void loginFailedReceived();
 	QString _token;
+	QDiscordTokenType _tokenType;
 	QDiscordRestComponent _rest;
 	QDiscordWsComponent _ws;
 	QDiscordStateComponent _state;

@@ -35,11 +35,11 @@ void QDiscord::login(const QString& email, const QString& password)
 	_rest.login(email, password);
 }
 
-void QDiscord::login(const QString& token)
+void QDiscord::login(const QString& token, QDiscordTokenType tokenType)
 {
 	connectDiscordSignals();
 	_signalsConnected = true;
-	_rest.login(token);
+	_rest.login(token, tokenType);
 }
 
 void QDiscord::logout()
@@ -48,15 +48,16 @@ void QDiscord::logout()
 	_rest.logout();
 }
 
-void QDiscord::tokenVerfified(const QString& token)
+void QDiscord::tokenVerfified(const QString& token, QDiscordTokenType tokenType)
 {
 	_token = token;
+	_tokenType = tokenType;
 	_rest.getEndpoint();
 }
 
 void QDiscord::endpointAcquired(const QString& endpoint)
 {
-	_ws.connectToEndpoint(endpoint, _token);
+	_ws.connectToEndpoint(endpoint, _token, _tokenType);
 }
 
 void QDiscord::connectComponents()

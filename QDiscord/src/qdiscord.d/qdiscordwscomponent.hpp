@@ -45,8 +45,11 @@ public:
 	 * \brief Makes the WebSocket connect to the specified endpoint.
 	 * \param endpoint The URL to the endpoint the WebSocket should connect to.
 	 * \param token The token the WebSocket should use to authenticate itself once it connects.
+	 * \param tokenType Specifies the type of the provided token.
 	 */
-	void connectToEndpoint(const QString& endpoint, const QString& token);
+	void connectToEndpoint(const QString& endpoint,
+						   const QString& token,
+						   QDiscordTokenType tokenType);
 	///\brief Makes the WebSocket disconnect from the endpoint.
 	void close();
 	/*!
@@ -130,7 +133,8 @@ signals:
 	void channelDeleteReceived(const QJsonObject& object);
 	void channelUpdateReceived(const QJsonObject& object);
 private:
-	void login(const QString& token);
+	void login(const QString& token,
+			   QDiscordTokenType tokenType);
 	void reconnect();
 	void connected_();
 	void disconnected_();
@@ -147,6 +151,7 @@ private:
 	QTimer _reconnectTimer;
 	QString _gateway;
 	QString _token;
+	QDiscordTokenType _tokenType;
 	//   Type   , Handler function
 	QMap<QString, std::function<void (const QJsonObject&)>> _eventDispatchTable;
 	QWebSocket _socket;

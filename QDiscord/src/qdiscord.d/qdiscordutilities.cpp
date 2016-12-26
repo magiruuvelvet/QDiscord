@@ -97,3 +97,17 @@ QDateTime QDiscordUtilities::snowflakeTime(QString snowflake)
 					((snowflake.toLongLong() >> 22) + discordEpoch) / 1000
 				);
 }
+
+QString QDiscordUtilities::convertTokenToType(QString token,
+											  QDiscordTokenType tokenType)
+{
+	switch(tokenType)
+	{
+	case QDiscordTokenType::Bot:
+		return "Bot " + token;
+	case QDiscordTokenType::Bearer:
+		return "Bearer " + token;
+	default:
+		return token;
+	}
+}

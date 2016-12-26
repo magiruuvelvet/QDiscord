@@ -58,8 +58,10 @@ public:
 	 * If logging in fails, emits QDiscordRestComponent::loginFailed
 	 * If logging in succeeds, emits QDiscordRestComponent::tokenVerified
 	 * \param token The token to use.
+	 * \param tokenType Specifies the type of the provided token.
 	 */
-	void login(const QString& token);
+	void login(const QString& token,
+			   QDiscordTokenType tokenType = QDiscordTokenType::Bot);
 	/*!
 	 * \brief Sends a message to the specified channel.
 	 *
@@ -128,7 +130,7 @@ signals:
 	///\brief Emitted when a logout has successfully completed.
 	void loggedOut();
 	///\brief Emitted when the token acquired when logging in has been verified to be correct.
-	void tokenVerified(const QString& token);
+	void tokenVerified(const QString& token, QDiscordTokenType tokenType);
 	/*!
 	 * \brief Emitted when logging in has failed. The most common cause for this is invalid authentication.
 	 * \param error A QNetworkReply::NetworkError enum containing more

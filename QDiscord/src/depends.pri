@@ -24,7 +24,8 @@ DIRHEADERS += $$PWD/qdiscord.d/qdiscord.hpp \
     $$PWD/qdiscord.d/qdiscordchannel.hpp \
     $$PWD/qdiscord.d/qdiscordmember.hpp \
     $$PWD/qdiscord.d/qdiscordmessage.hpp \
-    $$PWD/qdiscord.d/qdiscordgame.hpp
+    $$PWD/qdiscord.d/qdiscordgame.hpp \
+    $$PWD/qdiscord.d/qdiscordtokentype.hpp
 
 HEADERS += $$TOPHEADERS \
     $$DIRHEADERS

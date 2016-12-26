@@ -45,12 +45,14 @@ QDiscordWsComponent::QDiscordWsComponent(QObject* parent) : QObject(parent)
 }
 
 void QDiscordWsComponent::connectToEndpoint(const QString& endpoint,
-											const QString& token)
+											const QString& token,
+											QDiscordTokenType tokenType)
 {
 	if(_reconnectTimer.isActive())
 		_reconnectTimer.stop();
 	_gateway = endpoint;
 	_token = token;
+	_tokenType = tokenType;
 	_socket.open(endpoint);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
@@ -96,7 +98,8 @@ void QDiscordWsComponent::setStatus(bool idle, QDiscordGame game)
 	_socket.sendTextMessage(document.toJson(QJsonDocument::Compact));
 }
 
-void QDiscordWsComponent::login(const QString& token)
+void QDiscordWsComponent::login(const QString& token,
+								QDiscordTokenType tokenType)
 {
 	if(_reconnectTimer.isActive())
 		_reconnectTimer.stop();
@@ -104,7 +107,8 @@ void QDiscordWsComponent::login(const QString& token)
 	QJsonObject mainObject;
 	mainObject["op"] = 2;
 	QJsonObject dataObject;
-	dataObject["token"] = token;
+	dataObject["token"] =
+			QDiscordUtilities::convertTokenToType(token, tokenType);
 	dataObject["v"] = 5;
 	dataObject["properties"] =
 			QJsonObject({
@@ -150,7 +154,7 @@ void QDiscordWsComponent::reconnect()
 		if(_maxReconnectAttempts != -1)
 			_reconnectAttempts++;
 		emit attemptingReconnect();
-		connectToEndpoint(_gateway, _token);
+		connectToEndpoint(_gateway, _token, _tokenType);
 	}
 }
 
@@ -159,7 +163,7 @@ void QDiscordWsComponent::connected_()
 	if(_reconnectTimer.isActive())
 		_reconnectTimer.stop();
 	emit connected();
-	login(_token);
+	login(_token, _tokenType);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<this<<"connected, logging in";

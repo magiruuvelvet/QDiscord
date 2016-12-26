@@ -47,15 +47,16 @@ void QDiscordRestComponent::login(const QString& email, const QString& password)
 					QJsonDocument::fromJson(
 							reply->readAll()
 						).object().value("token").toString();
-			emit tokenVerified(_authentication);
+			emit tokenVerified(_authentication, QDiscordTokenType::None);
 		}
 		reply->deleteLater();
 	});
 }
 
-void QDiscordRestComponent::login(const QString& token)
+void QDiscordRestComponent::login(const QString& token,
+								  QDiscordTokenType tokenType)
 {
-	_authentication = "Bot "+token;
+	_authentication = QDiscordUtilities::convertTokenToType(token, tokenType);
 	get(QDiscordUtilities::endPoints.me,
 	[=](){
 		QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
@@ -67,7 +68,7 @@ void QDiscordRestComponent::login(const QString& token)
 			emit loginFailed(reply->error());
 		}
 		else
-			emit tokenVerified(_authentication);
+			emit tokenVerified(token, tokenType);
 		reply->deleteLater();
 	});
 }
