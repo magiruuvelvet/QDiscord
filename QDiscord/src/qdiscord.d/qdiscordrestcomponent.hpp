@@ -84,6 +84,12 @@ public:
 	void deleteMessage(QDiscordMessage message);
 	///\brief Deletes the specified message by ID and channel ID.
 	void deleteMessage(const QString& messageId, const QString& channelId);
+	///\brief Edits the specified message to contain the specified content
+	void editMessage(QDiscordMessage message, const QString& newContent);
+	///\brief Edits the message specified by channel ID and mesage ID to contain the specified content.
+	void editMessage(const QString& messageId,
+					 const QString& channelId,
+					 const QString& newContent);
 	///\brief Logs out using the stored token.
 	void logout();
 	///\brief Sends a request to receive an endpoint for connecting using a WebSocket.
@@ -156,6 +162,8 @@ signals:
 	 * may return a more useful string in the context of the Discord API.
 	 */
 	void messageDeleteFailed(QNetworkReply::NetworkError error);
+	void messageEdited(const QDiscordMessage& message);
+	void messageEditFailed(QNetworkReply::NetworkError error);
 	/*!
 	 * \brief Emitted when a channel has been updated.
 	 * \param channel A reference to the channel that was updated.

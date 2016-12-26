@@ -179,6 +179,42 @@ void QDiscordRestComponent::deleteMessage(const QString& messageId,
 	});
 }
 
+void QDiscordRestComponent::editMessage(QDiscordMessage message,
+										const QString& newContent)
+{
+	editMessage(message.id(), message.channelId(), newContent);
+}
+
+void QDiscordRestComponent::editMessage(const QString& messageId,
+										const QString& channelId,
+										const QString& newContent)
+{
+	QJsonObject object;
+	object["content"] = newContent;
+
+	patch(object,
+		  QUrl(
+			  QDiscordUtilities::endPoints.channels +
+			  "/" + channelId + "/messages/" + messageId
+			  ),
+	[=]() {
+		QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
+		if(!reply)
+			return;
+		if(reply->error() != QNetworkReply::NoError)
+			emit messageEditFailed(reply->error());
+		else
+		{
+			QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+			QJsonObject object = document.object();
+			QDiscordMessage newMessage(object,
+									   QSharedPointer<QDiscordChannel>());
+			emit messageEdited(newMessage);
+		}
+		reply->deleteLater();
+	});
+}
+
 void QDiscordRestComponent::logout()
 {
 	if(_authentication.isEmpty())
