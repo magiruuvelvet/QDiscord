@@ -1,6 +1,6 @@
 /*
  * QDiscord - An unofficial C++ and Qt wrapper for the Discord API.
- * Copyright (C) 2016 george99g
+ * Copyright (C) 2016-2017 george99g
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
