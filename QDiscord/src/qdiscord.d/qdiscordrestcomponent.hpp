@@ -186,6 +186,7 @@ private:
 	QSharedPointer<QDiscordUser> _self;
 	QString _authentication;
 	QNetworkAccessManager _manager;
+	bool _loggedIn;
 };
 
 #endif // QDISCORDRESTCOMPONENT_HPP

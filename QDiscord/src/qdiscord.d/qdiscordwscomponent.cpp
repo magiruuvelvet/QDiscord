@@ -48,6 +48,13 @@ void QDiscordWsComponent::connectToEndpoint(const QString& endpoint,
 											const QString& token,
 											QDiscordTokenType tokenType)
 {
+	if(!_token.isEmpty())
+	{
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"connect requested while already in a connected/connecting state";
+#endif
+		return;
+	}
 	if(_reconnectTimer.isActive())
 		_reconnectTimer.stop();
 	_gateway = endpoint;
@@ -62,6 +69,8 @@ void QDiscordWsComponent::connectToEndpoint(const QString& endpoint,
 
 void QDiscordWsComponent::close()
 {
+	if(_token.isEmpty())
+		return;
 	if(_reconnectTimer.isActive())
 		_reconnectTimer.stop();
 	_tryReconnecting = false;

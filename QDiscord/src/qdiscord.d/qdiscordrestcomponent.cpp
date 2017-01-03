@@ -23,6 +23,7 @@ QDiscordRestComponent::QDiscordRestComponent(QObject* parent) : QObject(parent)
 {
 	_authentication = "";
 	_self = QSharedPointer<QDiscordUser>();
+	_loggedIn = false;
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<this<<"constructed";
@@ -31,6 +32,20 @@ QDiscordRestComponent::QDiscordRestComponent(QObject* parent) : QObject(parent)
 
 void QDiscordRestComponent::login(const QString& email, const QString& password)
 {
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"acquiring token via email and password";
+#endif
+	qWarning()<<"Logging in via email and password is deprecated";
+	qWarning()<<"Please use a token instead";
+	qWarning()<<"See the following link for more information:";
+	qWarning()<<"https://github.com/hammerandchisel/discord-api-docs/issues/69";
+	if(!_authentication.isEmpty())
+	{
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"attempted to acquire a token while one is already stored";
+#endif
+		return;
+	}
 	QJsonObject object;
 	object["email"] = email;
 	object["password"] = password;
@@ -40,13 +55,18 @@ void QDiscordRestComponent::login(const QString& email, const QString& password)
 		if(!reply)
 			return;
 		if(reply->error() != QNetworkReply::NoError)
+		{
+			_authentication = "";
+			_loggedIn = false;
 			emit loginFailed(reply->error());
+		}
 		else
 		{
 			_authentication =
 					QJsonDocument::fromJson(
 							reply->readAll()
 						).object().value("token").toString();
+			_loggedIn = true;
 			emit tokenVerified(_authentication, QDiscordTokenType::None);
 		}
 		reply->deleteLater();
@@ -56,6 +76,16 @@ void QDiscordRestComponent::login(const QString& email, const QString& password)
 void QDiscordRestComponent::login(const QString& token,
 								  QDiscordTokenType tokenType)
 {
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"verifying token";
+#endif
+	if(!_authentication.isEmpty())
+	{
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"attempted to verify a token while one is already stored";
+#endif
+		return;
+	}
 	_authentication = QDiscordUtilities::convertTokenToType(token, tokenType);
 	get(QDiscordUtilities::endPoints.me,
 	[=](){
@@ -65,10 +95,14 @@ void QDiscordRestComponent::login(const QString& token,
 		if(reply->error() != QNetworkReply::NoError)
 		{
 			_authentication = "";
+			_loggedIn = false;
 			emit loginFailed(reply->error());
 		}
 		else
+		{
+			_loggedIn = true;
 			emit tokenVerified(token, tokenType);
+		}
 		reply->deleteLater();
 	});
 }
@@ -77,7 +111,7 @@ void QDiscordRestComponent::sendMessage(const QString& content,
 										QSharedPointer<QDiscordChannel> channel,
 										bool tts)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	if(!channel)
@@ -119,7 +153,7 @@ void QDiscordRestComponent::sendMessage(const QString& content,
 										const QString& channelId,
 										bool tts)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	QJsonObject object;
@@ -161,7 +195,7 @@ void QDiscordRestComponent::deleteMessage(QDiscordMessage message)
 void QDiscordRestComponent::deleteMessage(const QString& messageId,
 										  const QString& channelId)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 	deleteResource(QUrl(QString(
 								QDiscordUtilities::endPoints.channels + "/" +
@@ -189,6 +223,8 @@ void QDiscordRestComponent::editMessage(const QString& messageId,
 										const QString& channelId,
 										const QString& newContent)
 {
+	if(!_loggedIn)
+		return;
 	QJsonObject object;
 	object["content"] = newContent;
 
@@ -219,10 +255,13 @@ void QDiscordRestComponent::logout()
 {
 	if(_authentication.isEmpty())
 		return;
+	if(!_loggedIn)
+		return;
 	_self.reset();
 	QJsonObject object;
 	object["token"] = _authentication;
 	_authentication = "";
+	_loggedIn = false;
 	post(object, QDiscordUtilities::endPoints.logout,
 	[=](){
 		QNetworkReply* reply = static_cast<QNetworkReply*>(sender());
@@ -235,7 +274,7 @@ void QDiscordRestComponent::logout()
 
 void QDiscordRestComponent::getEndpoint()
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 	get(QDiscordUtilities::endPoints.gateway,
 	[=](){
@@ -260,7 +299,7 @@ void
 QDiscordRestComponent::setChannelName(const QString& name,
 										QSharedPointer<QDiscordChannel> channel)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	if(!channel)
@@ -295,7 +334,7 @@ QDiscordRestComponent::setChannelName(const QString& name,
 void QDiscordRestComponent::setChannelName(const QString& name,
 										   const QString& channelId)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	QJsonObject object;
@@ -329,7 +368,7 @@ void QDiscordRestComponent::setChannelPosition(
 			QSharedPointer<QDiscordChannel> channel
 		)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	if(!channel)
@@ -364,7 +403,7 @@ void QDiscordRestComponent::setChannelPosition(
 void QDiscordRestComponent::setChannelPosition(int position,
 											   const QString& channelId)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	QJsonObject object;
@@ -398,7 +437,7 @@ void QDiscordRestComponent::setChannelTopic(
 			QSharedPointer<QDiscordChannel> channel
 		)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	if(!channel)
@@ -436,7 +475,7 @@ void QDiscordRestComponent::setChannelTopic(
 void QDiscordRestComponent::setChannelTopic(const QString& topic,
 											const QString& channelId)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	QJsonObject object;
@@ -470,7 +509,7 @@ void QDiscordRestComponent::setChannelBitrate(
 			QSharedPointer<QDiscordChannel> channel
 		)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	if(!channel)
@@ -508,7 +547,7 @@ void QDiscordRestComponent::setChannelBitrate(
 void QDiscordRestComponent::setChannelBitrate(int bitrate,
 											  const QString& channelId)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	QJsonObject object;
@@ -542,7 +581,7 @@ void QDiscordRestComponent::setChannelUserLimit(
 		QSharedPointer<QDiscordChannel> channel
 		)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	if(!channel)
@@ -580,7 +619,7 @@ void QDiscordRestComponent::setChannelUserLimit(
 void QDiscordRestComponent::setChannelUserLimit(int limit,
 												const QString& channelId)
 {
-	if(_authentication.isEmpty())
+	if(!_loggedIn)
 		return;
 
 	QJsonObject object;

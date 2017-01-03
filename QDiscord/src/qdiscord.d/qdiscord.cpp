@@ -22,6 +22,8 @@ QDiscord::QDiscord(QObject* parent) : QObject(parent)
 {
 	connectComponents();
 	_signalsConnected = false;
+	_connecting = false;
+	_connected = false;
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<this<<"constructed";
@@ -30,26 +32,66 @@ QDiscord::QDiscord(QObject* parent) : QObject(parent)
 
 void QDiscord::login(const QString& email, const QString& password)
 {
-	connectDiscordSignals();
-	_signalsConnected = true;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"logging in via email and password";
+#endif
+	qWarning()<<"Logging in via email and password is deprecated";
+	qWarning()<<"Please use a token instead";
+	qWarning()<<"See the following link for more information:";
+	qWarning()<<"https://github.com/hammerandchisel/discord-api-docs/issues/69";
+	if(_connected || _connecting)
+	{
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"login requested while already in a connected/connecting state";
+#endif
+		return;
+	}
+	if(!_signalsConnected)
+	{
+		connectDiscordSignals();
+		_signalsConnected = true;
+	}
+	_connecting = true;
 	_rest.login(email, password);
 }
 
 void QDiscord::login(const QString& token, QDiscordTokenType tokenType)
 {
-	connectDiscordSignals();
-	_signalsConnected = true;
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"logging in via token";
+#endif
+	if(_connected || _connecting)
+	{
+#ifdef QDISCORD_LIBRARY_DEBUG
+		qDebug()<<this<<"login requested while already in a connected/connecting state";
+#endif
+		return;
+	}
+	if(!_signalsConnected)
+	{
+		connectDiscordSignals();
+		_signalsConnected = true;
+	}
+	_connecting = true;
 	_rest.login(token, tokenType);
 }
 
 void QDiscord::logout()
 {
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"disconnecting";
+#endif
 	_ws.close();
 	_rest.logout();
+	_connected = false;
+	_connecting = false;
 }
 
 void QDiscord::tokenVerfified(const QString& token, QDiscordTokenType tokenType)
 {
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"token verified, getting WS endpoint";
+#endif
 	_token = token;
 	_tokenType = tokenType;
 	_rest.getEndpoint();
@@ -57,6 +99,9 @@ void QDiscord::tokenVerfified(const QString& token, QDiscordTokenType tokenType)
 
 void QDiscord::endpointAcquired(const QString& endpoint)
 {
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"WS endpoint acquired, connecting WS component";
+#endif
 	_ws.connectToEndpoint(endpoint, _token, _tokenType);
 }
 
@@ -130,7 +175,7 @@ void QDiscord::connectDiscordSignals()
 	connect(&_ws, &QDiscordWsComponent::loginFailed,
 			this, &QDiscord::loginFailed);
 	connect(&_ws, &QDiscordWsComponent::loginSuccess,
-			this, &QDiscord::loginSuccess);
+			this, &QDiscord::loginSuccessRecevied);
 	connect(&_ws, &QDiscordWsComponent::disconnected,
 			this, &QDiscord::disconnected);
 	connect(&_ws, &QDiscordWsComponent::error,
@@ -168,15 +213,21 @@ void QDiscord::logoutFinished()
 		_signalsConnected = false;
 		disconnectDiscordSignals();
 	}
+	_connecting = false;
+	_connected = false;
 	emit loggedOut();
 }
 
 void QDiscord::loginSuccessRecevied()
 {
+	_connecting = false;
+	_connected = true;
 	emit loginSuccess();
 }
 
 void QDiscord::loginFailedReceived()
 {
+	_connecting = false;
+	_connected = false;
 	emit loginFailed();
 }

@@ -70,6 +70,8 @@ public:
 	QDiscordWsComponent* ws() {return &_ws;}
 	///\brief Returns a pointer to the state component.
 	QDiscordStateComponent* state() {return &_state;}
+	bool isConnected() {return _connected;}
+	bool isConnecting() {return _connecting;}
 signals:
 	/*!
 	 * \brief Emitted when logging in has failed.
@@ -102,6 +104,8 @@ private:
 	QDiscordWsComponent _ws;
 	QDiscordStateComponent _state;
 	bool _signalsConnected;
+	bool _connecting;
+	bool _connected;
 };
 
 #endif // QDISCORD_HPP
