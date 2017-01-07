@@ -171,7 +171,7 @@ void QDiscordWsComponent::reconnect()
 		if(_maxReconnectAttempts != -1)
 			_reconnectAttempts++;
 		emit attemptingReconnect();
-		connectToEndpoint(_gateway, _token, _tokenType);
+		_socket.open(_gateway);
 	}
 }
 
