@@ -93,6 +93,16 @@ QDiscordMessage::QDiscordMessage(const QDiscordMessage& other)
 	QList<QSharedPointer<QDiscordUser>> otherMentions = other.mentions();
 	for(QSharedPointer<QDiscordUser> item : otherMentions)
 		_mentions.append(item);
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMessage("<<this<<") copy-constructed";
+#endif
+}
+
+QDiscordMessage::~QDiscordMessage()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMessage("<<this<<") destroyed";
+#endif
 }
 
 QSharedPointer<QDiscordGuild> QDiscordMessage::guild() const

@@ -33,6 +33,7 @@ public:
 	QDiscordUser(const QJsonObject& object);
 	///\brief Default public constructor
 	QDiscordUser();
+	~QDiscordUser();
 	///\brief Updates the current instance from the provided parameters.
 	void update(const QJsonObject& object);
 	///\brief Returns the user's ID.

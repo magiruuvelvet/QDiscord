@@ -31,6 +31,9 @@ QDiscordStateComponent::QDiscordStateComponent(QObject* parent)
 QDiscordStateComponent::~QDiscordStateComponent()
 {
 	clear();
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"destroyed";
+#endif
 }
 
 QSharedPointer<QDiscordChannel>

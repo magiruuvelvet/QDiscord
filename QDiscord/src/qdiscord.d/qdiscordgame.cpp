@@ -51,3 +51,10 @@ QDiscordGame::QDiscordGame(const QJsonObject& object)
 	qDebug()<<"QDiscordGame("<<this<<") constructed";
 #endif
 }
+
+QDiscordGame::~QDiscordGame()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordGame("<<this<<") destroyed";
+#endif
+}

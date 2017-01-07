@@ -46,6 +46,7 @@ public:
 	QDiscordGame(QString name = "", QString url = "", GameType type = GameType::None);
 	///\brief Creates an instance from the provided JSON object.
 	QDiscordGame(const QJsonObject& object);
+	~QDiscordGame();
 	///\brief Returns the game name of this object.
 	QString name() const {return _name;}
 	///\brief Returns the URL of this game object.

@@ -43,6 +43,7 @@ public:
 	QDiscordMessage();
 	///\brief Deep copies the provided object.
 	QDiscordMessage(const QDiscordMessage& other);
+	~QDiscordMessage();
 	///\brief Returns the message's ID.
 	QString id() const {return _id;}
 	///\brief Returns the message's contents.

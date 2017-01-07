@@ -30,6 +30,13 @@ QDiscord::QDiscord(QObject* parent) : QObject(parent)
 #endif
 }
 
+QDiscord::~QDiscord()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"destroyed";
+#endif
+}
+
 void QDiscord::login(const QString& email, const QString& password)
 {
 #ifdef QDISCORD_LIBRARY_DEBUG

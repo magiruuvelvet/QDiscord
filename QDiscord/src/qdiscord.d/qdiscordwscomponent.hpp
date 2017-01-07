@@ -41,6 +41,7 @@ class QDiscordWsComponent : public QObject
 public:
 	///\brief Standard QObject constructor.
 	explicit QDiscordWsComponent(QObject* parent = 0);
+	~QDiscordWsComponent();
 	/*!
 	 * \brief Makes the WebSocket connect to the specified endpoint.
 	 * \param endpoint The URL to the endpoint the WebSocket should connect to.

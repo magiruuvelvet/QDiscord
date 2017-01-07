@@ -62,6 +62,16 @@ QDiscordMember::QDiscordMember(const QDiscordMember& other)
 				QSharedPointer<QDiscordUser>(new QDiscordUser(*other.user())) :
 				QSharedPointer<QDiscordUser>();
 	_guild = other.guild();
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMember("<<this<<") copy-constructed";
+#endif
+}
+
+QDiscordMember::~QDiscordMember()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordMember("<<this<<") destroyed";
+#endif
 }
 
 void QDiscordMember::update(const QJsonObject& object,

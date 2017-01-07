@@ -44,6 +44,14 @@ QDiscordWsComponent::QDiscordWsComponent(QObject* parent) : QObject(parent)
 #endif
 }
 
+QDiscordWsComponent::~QDiscordWsComponent()
+{
+	close();
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<this<<"destroyed";
+#endif
+}
+
 void QDiscordWsComponent::connectToEndpoint(const QString& endpoint,
 											const QString& token,
 											QDiscordTokenType tokenType)

@@ -75,3 +75,10 @@ QDiscordChannel::QDiscordChannel(const QDiscordChannel& other)
 	_guild = other.guild();
 	_recipient = other.recipient();
 }
+
+QDiscordChannel::~QDiscordChannel()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordChannel("<<this<<") destroyed";
+#endif
+}

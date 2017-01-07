@@ -45,6 +45,7 @@ public:
 	QDiscordMember();
 	///\brief Deep copies the provided object.
 	QDiscordMember(const QDiscordMember& other);
+	~QDiscordMember();
 	///\brief Updates the current instance from the provided parameters.
 	void update(const QJsonObject& object, QSharedPointer<QDiscordGuild> guild);
 	///\brief Returns whether the member has disabled their speakers.

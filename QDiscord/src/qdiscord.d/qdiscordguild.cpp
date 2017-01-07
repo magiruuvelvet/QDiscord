@@ -70,6 +70,9 @@ QDiscordGuild::QDiscordGuild(const QDiscordGuild& other):
 		newChannel->setGuild(sharedFromThis());
 		_channels.insert(other.channels().key(item), newChannel);
 	}
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordGuild("<<this<<") copy-constructed";
+#endif
 }
 
 QDiscordGuild::QDiscordGuild()
@@ -84,6 +87,13 @@ QDiscordGuild::QDiscordGuild()
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordGuild("<<this<<") constructed";
+#endif
+}
+
+QDiscordGuild::~QDiscordGuild()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordGuild("<<this<<") destroyed";
 #endif
 }
 

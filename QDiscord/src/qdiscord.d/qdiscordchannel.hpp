@@ -43,6 +43,7 @@ public:
 	QDiscordChannel();
 	///\brief Deep copies the provided object.
 	QDiscordChannel(const QDiscordChannel& other);
+	~QDiscordChannel();
 	/*!
 	 * \brief An enumerator holding all possible types of channels.
 	 *

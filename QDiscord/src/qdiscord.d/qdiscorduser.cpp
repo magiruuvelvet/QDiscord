@@ -49,6 +49,13 @@ QDiscordUser::QDiscordUser()
 #endif
 }
 
+QDiscordUser::~QDiscordUser()
+{
+#ifdef QDISCORD_LIBRARY_DEBUG
+	qDebug()<<"QDiscordUser("<<this<<") destroyed";
+#endif
+}
+
 void QDiscordUser::update(const QJsonObject& object)
 {
 	if(object.contains("id"))

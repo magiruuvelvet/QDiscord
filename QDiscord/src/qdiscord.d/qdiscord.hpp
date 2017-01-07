@@ -41,6 +41,7 @@ public:
 	 * \param parent
 	 */
 	explicit QDiscord(QObject* parent = 0);
+	~QDiscord();
 	/*!
 	 * \brief Automatically calls all component functions required to handle a standard Discord login.
 	 *

@@ -41,6 +41,7 @@ class QDiscordRestComponent : public QObject
 public:
 	///\brief Standard QObject constructor.
 	explicit QDiscordRestComponent(QObject* parent = 0);
+	~QDiscordRestComponent();
 	/*!
 	 * \brief Acquires a token for use in all other methods using a standard Discord account.
 	 *

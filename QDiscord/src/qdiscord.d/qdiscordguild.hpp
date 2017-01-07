@@ -39,6 +39,7 @@ public:
 	QDiscordGuild(const QDiscordGuild& other);
 	///\brief Default public constructor.
 	QDiscordGuild();
+	~QDiscordGuild();
 	///\brief Returns the guild's ID.
 	QString id() const {return _id;}
 	///\brief Returns the guild's name.
