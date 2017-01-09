@@ -19,6 +19,15 @@
 #ifndef QDISCORDTOKENTYPE_HPP
 #define QDISCORDTOKENTYPE_HPP
 
+/*!
+ * \brief Specifies the type of a token passed to %QDiscord.
+ *
+ * See https://discordapp.com/developers/docs/reference#authentication for more
+ * information and what the types are used for.\n
+ * \n
+ * If a type is not available here, use QDiscordTokenType::None and append the
+ * type to the token manually.
+ */
 enum class QDiscordTokenType {
 	None, Bot, Bearer
 };

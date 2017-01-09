@@ -29,8 +29,9 @@ class QDiscordGuild;
 /*!
  * \brief Represents a guild member in the Discord API.
  *
- * This class contains a QDiscordUser object which provides more information about the guild member.
- * You may acquire a pointer to it using QDiscordMember::user().
+ * This class contains a QDiscordUser object which provides more information
+ * about the guild member.\n
+ * You may acquire a pointer to it using QDiscordMember::user.
  */
 class QDiscordMember
 {
@@ -41,9 +42,7 @@ public:
 	 * \param guild A pointer to the member's parent guild.
 	 */
 	QDiscordMember(const QJsonObject& object, QSharedPointer<QDiscordGuild> guild);
-	///\brief Default public constructor.
 	QDiscordMember();
-	///\brief Deep copies the provided object.
 	QDiscordMember(const QDiscordMember& other);
 	~QDiscordMember();
 	///\brief Updates the current instance from the provided parameters.
@@ -67,14 +66,14 @@ public:
 	/*!
 	 * \brief Compares two members.
 	 *
-	 * This uses the users' IDs and the guild pointers to check if they're the
+	 * This uses the users' IDs and the guilds' IDs to check if they're the
 	 * same member. If a pointer is null, returns false.
 	 */
 	bool operator ==(const QDiscordMember& other) const;
 	/*!
 	 * \brief Compares two members.
 	 *
-	 * This uses the users' IDs and the guild pointers to check if they're the
+	 * This uses the users' IDs and the guilds' IDs to check if they're the
 	 * same member. If a pointer is null, returns true.
 	 */
 	bool operator !=(const QDiscordMember& other) const;

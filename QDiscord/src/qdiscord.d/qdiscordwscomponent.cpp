@@ -105,7 +105,7 @@ void QDiscordWsComponent::setStatus(bool idle, QDiscordGame game)
 		QJsonObject gameObject;
 		gameObject["name"] = game.name();
 		gameObject["url"] = game.url()==""?QJsonValue():game.url();
-		gameObject["type"] = game.type();
+		gameObject["type"] = static_cast<int>(game.type());
 		presenceObject["game"] = gameObject;
 	}
 	else

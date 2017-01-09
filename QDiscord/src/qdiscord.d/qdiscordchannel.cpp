@@ -81,4 +81,5 @@ QDiscordChannel::~QDiscordChannel()
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordChannel("<<this<<") destroyed";
 #endif
+	_recipient.clear();
 }

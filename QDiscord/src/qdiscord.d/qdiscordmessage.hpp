@@ -39,9 +39,7 @@ public:
 			QSharedPointer<QDiscordChannel> channel =
 				QSharedPointer<QDiscordChannel>()
 			);
-	///\brief Default public constructor.
 	QDiscordMessage();
-	///\brief Deep copies the provided object.
 	QDiscordMessage(const QDiscordMessage& other);
 	~QDiscordMessage();
 	///\brief Returns the message's ID.
@@ -63,8 +61,9 @@ public:
 	/*!
 	 * \brief Returns a pointer to the guild this message was sent in using
 	 * the channel parameter provided in the class' constructor.
-	 * \returns `nullptr` if the message was sent in a private channel and thus the
-	 * channel has no guild or if a channel was not provided in the class' constructor
+	 * \returns `nullptr` if the message was sent in a private channel and thus
+	 * the channel has no guild or if a channel was not provided in the class'
+	 * constructor.
 	 */
 	QSharedPointer<QDiscordGuild> guild() const;
 	///\brief Returns a list of users mentioned in this message.

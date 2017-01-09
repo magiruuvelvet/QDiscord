@@ -1,0 +1,15 @@
+/*!
+ * \page versioning How the library's versioning works
+ * \li Any changes to the major version warrant a new tag on Git.
+ *
+ * If the library's major version is less than one
+ * -----------------------------------------------
+ * \li Any change to the library increments the minor version.
+ *
+ * If the library's major version is more than zero
+ * ------------------------------------------------
+ * \li Any changes to the library that may break client code increment the
+ * major version.
+ * \li Any changes to the library that do not change the library API increment
+ * the minor verison.
+ */

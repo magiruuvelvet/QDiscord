@@ -45,7 +45,8 @@ public:
 	/*!
 	 * \brief Makes the WebSocket connect to the specified endpoint.
 	 * \param endpoint The URL to the endpoint the WebSocket should connect to.
-	 * \param token The token the WebSocket should use to authenticate itself once it connects.
+	 * \param token The token the WebSocket should use to authenticate itself
+	 * once it connects.
 	 * \param tokenType Specifies the type of the provided token.
 	 */
 	void connectToEndpoint(const QString& endpoint,
@@ -54,7 +55,8 @@ public:
 	///\brief Makes the WebSocket disconnect from the endpoint.
 	void close();
 	/*!
-	 * \brief Returns the amount of reconnects this object will attempt to do before stopping.
+	 * \brief Returns the amount of reconnects this object will attempt to do
+	 * before stopping.
 	 *
 	 * If the value is -1, the object will always attempt to stay connected.
 	 */
@@ -62,9 +64,13 @@ public:
 	/*!
 	 * \brief Sets the maximum reconnection attempts.
 	 *
-	 * Set to -1 if you don't want this object to stop attempting to reconnect. This is the default.
+	 * Set to -1 if you don't want this object to stop attempting to
+	 * reconnect.\n
+	 * This is the default.
 	 */
-	void setMaxReconnectAttempts(int maxReconnectAttempts){_maxReconnectAttempts=maxReconnectAttempts;}
+	void setMaxReconnectAttempts(int maxReconnectAttempts) {
+		_maxReconnectAttempts=maxReconnectAttempts;
+	}
 	///\brief Returns the delay time before reconnecting in milliseconds.
 	int reconnectTime() {return _reconnectTime;}
 	///\brief Sets the delay time before reconnecting in milliseconds.
@@ -72,42 +78,50 @@ public:
 	/*!
 	 * \brief Enable dumping incoming WebSocket packets.
 	 *
-	 * This information will be placed in a file named `DUMPFILE.txt` in the current working directory.
-	 * The information contained in the file is useful for collecting samples for improving this library's coverage of the API.
+	 * This information will be placed in a file named `DUMPFILE.txt` in the
+	 * current working directory.\n
+	 * The information contained in the file is useful for collecting samples
+	 * for improving this library's coverage of the API.\n
+	 * If you're an average user of the library, you shouldn't bother with this.
 	 */
 	void enableDumpfile(){_useDumpfile = true;}
 	/*!
 	 * \brief Sets the client's status.
-	 * \param idle Whether to set the client as idle or not. If true, gives Discord
-	 * the current UNIX time to use for idle duration.
-	 * \param game A QDiscordGame object containing a game to set the current status to.
-	 * Defaults to nothing.
+	 * \param idle Whether to set the client as idle or not. If true, gives
+	 * Discord the current UNIX time to use for idle duration.
+	 * \param game A QDiscordGame object containing a game to set the current
+	 * status to. Defaults to nothing.
 	 */
 	void setStatus(bool idle = false, QDiscordGame game = QDiscordGame());
 signals:
 	///\brief Emitted when the WebSocket has successfully logged in.
 	void loginSuccess();
 	/*!
-	 * \brief Emitted when the WebSocket fails to log in with the provided token.
+	 * \brief Emitted when the WebSocket fails to log in with the provided
+	 * token.
 	 *
-	 * This should never happen unless the WebSocket component is manually called by external code.
+	 * This should never happen unless the WebSocket component is manually
+	 * called.
 	 */
 	void loginFailed();
-	/*!
-	 * \brief Emitted when the WebSocket successfully connects to the endpoint.
-	 *
-	 * Useful when an application needs to track the WebSocket's current state.
-	 */
+	///\brief Emitted when the WebSocket successfully connects to the endpoint.
 	void connected();
-	///\brief Emitted when the WebSocket has been disconnected from the endpoint.
+	/*!
+	 * \brief Emitted when the WebSocket has been disconnected from the
+	 * endpoint.
+	 */
 	void disconnected(QString reason, int reasonCode);
 	///\brief Emitted when a reconnection attempt is about to start.
 	void attemptingReconnect();
-	///\brief Emitted when all reconnect attempts have failed and the WebSocket will stop retrying.
+	/*!
+	 * \brief Emitted when all reconnect attempts have failed and the WebSocket
+	 * will stop retrying.
+	 */
 	void reconnectImpossible();
 	/*!
 	 * \brief Emitted when the WebSocket encounters an error.
-	 * \param error A `QAbstractSocket::SocketError` enum providing more information about the encountered error.
+	 * \param error A `QAbstractSocket::SocketError` enum providing more
+	 * information about the encountered error.
 	 */
 	void error(QAbstractSocket::SocketError error);
 	void readyReceived(const QJsonObject& object);

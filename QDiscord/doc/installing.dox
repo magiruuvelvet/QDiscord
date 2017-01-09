@@ -1,0 +1,42 @@
+/*!
+ * \page installing Installing the library
+ * \section configuration Configuration
+ * The library's main static configuration file is located in `src/config.pri`.
+ * Use this to set configuration options like debugging, the library's version,
+ * the library's name and a link to the library's repository.\n
+ * Keep in mind, the library should not be in debug mode for any production
+ * code, since some of that debug information may involve private information.
+ * (The library shouldn't be in production code until version 1, for that
+ * matter)
+ * \section compiling Compiling
+ * \subsection qtcreator QtCreator
+ * Just selecting the build target you want and hitting build should be enough.
+ * \subsection terminal Command-line
+ * The following commands should build the project for Linux:
+ * \code
+ * mkdir build
+ * cd build
+ * qmake -qt=qt5 ../QDiscord/QDiscord.pro
+ * make all
+ * \endcode
+ * \section tests Tests
+ * If you select the Debug build target, tests will be compiled. Execute the
+ * resulting executables to run the tests, or use QtCreator's plugin to run
+ * them automatically.
+ * \section install Installing
+ * Change your current working directory to the build directory and call `make
+ * install`.\n
+ * This will install the library into `/usr` by default. (`/usr/lib` and
+ * `/usr/include`). To override this, call the command like this:
+ * \code
+ * PREFIX=/ make install
+ * \endcode
+ * \section docs Compiling the documentation
+ * Make has an extra target named `docs` for generating the documentation.\n
+ * If you wish to generate the documentation when compiling from QtCreator, add
+ * a custom build step for make with the Doxygen file's directory as the working
+ * directory and with the following arguments for make:
+ * \code
+ * docs --makefile=%{buildDir}/Makefile
+ * \endcode
+ */

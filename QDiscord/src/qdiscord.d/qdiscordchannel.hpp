@@ -32,22 +32,23 @@ public:
 	 * \brief Creates an instance from the provided parameters.
 	 * \param object A JSON object of a Discord channel.
 	 * \param guild A pointer to the parent guild of the channel, if any.
-	 * \note Some properties may be defaul, not accessible or `nullptr`, depending on what type() and isPrivate() return.
+	 * \note Some properties may be defaul, not accessible or `nullptr`,
+	 * depending on what type() and isPrivate() return.
 	 */
 	QDiscordChannel(
 			const QJsonObject& object,
 			QSharedPointer<QDiscordGuild> guild =
 				QSharedPointer<QDiscordGuild>()
 			);
-	///\brief Default public constructor.
 	QDiscordChannel();
-	///\brief Deep copies the provided object.
 	QDiscordChannel(const QDiscordChannel& other);
 	~QDiscordChannel();
 	/*!
 	 * \brief An enumerator holding all possible types of channels.
 	 *
-	 * If a type is not defined here, `ChannelType::UnknownType` will be set.
+	 * If a type is not defined here, `ChannelType::UnknownType` will be set.\n
+	 * See https://discordapp.com/developers/docs/resources/channel#guild-channel-structure
+	 * for more information.
 	 */
 	enum class ChannelType
 	{
@@ -64,7 +65,7 @@ public:
 	/*!
 	 * \brief Returns the channel's type.
 	 *
-	 * Possible types specified in `ChannelType`.
+	 * Possible types are specified in QDiscordChannel::ChannelType.
 	 */
 	ChannelType type() const {return _type;}
 	/*!
@@ -78,9 +79,8 @@ public:
 	///\brief Returns a pointer to this channel's parent guild.
 	QSharedPointer<QDiscordGuild> guild() const {return _guild;}
 	/*!
-	 * \brief Returns a pointer to this channel's recipient, if this is a private channel.
-	 *
-	 * The recipient object will be deleted when this object is deleted.
+	 * \brief Returns a pointer to this channel's recipient, if this is a
+	 * private channel.
 	 */
 	QSharedPointer<QDiscordUser> recipient() const {return _recipient;}
 	/*!

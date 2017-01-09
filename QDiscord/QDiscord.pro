@@ -9,8 +9,9 @@ TEMPLATE = subdirs
 SUBDIRS += src
 CONFIG(debug, debug|release) {
     SUBDIRS += tests
+    tests.depends = src
 }
 
-include(doc/doc.pri)
-
 OTHER_FILES += Doxyfile
+
+include(doc/doc.pri)

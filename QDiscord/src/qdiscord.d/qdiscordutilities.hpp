@@ -24,7 +24,10 @@
 #include <QDateTime>
 #include "qdiscordtokentype.hpp"
 
-///\brief A namespace containing configuration variables and functions used in QDiscord.
+/*!
+ * \brief A namespace containing configuration variables and functions used in
+ * %QDiscord.
+ */
 namespace QDiscordUtilities
 {
 	///\brief A struct used for storing the Discord API endpoints.
@@ -43,11 +46,11 @@ namespace QDiscordUtilities
 	};
 	extern const EndPoints endPoints;
 	/*!
-	 * \brief Converts network errors to a human-readable string based on Discord documentation.
+	 * \brief Converts network errors to a human-readable string based on
+	 * Discord documentation.
 	 *
 	 * See https://discordapp.com/developers/docs/topics/response-codes
 	 * \param error The network error returned by a failed method.
-	 * \return A human-readable string to help explain the reason for failure.
 	 */
 	QString networkErrorToString(QNetworkReply::NetworkError error);
 	///\brief Returns the DateTime a Discord snowflake was generated.
@@ -59,13 +62,16 @@ namespace QDiscordUtilities
 	/*!
 	 * \brief The library name.
 	 *
-	 * This should always be QDiscord, unless you fork the project and change the name.
+	 * This should always be QDiscord, unless you fork the project and change
+	 * the name.\n
+	 * Change it in `src/config`.
 	 */
 	extern const QString libName;
 	/*!
 	 * \brief The name of the bot this library will be used for.
 	 *
-	 * This should always be changed to your bot's name.
+	 * This should always be changed to your bot's name.\n
+	 * Change it in `src/config`.
 	 */
 	extern const QString botName;
 	///\brief The major version of the library.

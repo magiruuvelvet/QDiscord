@@ -35,9 +35,7 @@ public:
 	 * \param object A JSON object of a Discord guild.
 	 */
 	QDiscordGuild(const QJsonObject& object);
-	///\brief Deep copies the provided object.
 	QDiscordGuild(const QDiscordGuild& other);
-	///\brief Default public constructor.
 	QDiscordGuild();
 	~QDiscordGuild();
 	///\brief Returns the guild's ID.
@@ -47,12 +45,15 @@ public:
 	/*!
 	 * \brief Returns whether the guild is unavailable.
 	 *
-	 * If this is true, most members will not be set to anything.
+	 * If this is true, a majority of guild information will not be available.
 	 */
 	bool unavailable() const {return _unavailable;}
 	///\brief Returns the guild's verification level.
 	int verificationLevel() const {return _verificationLevel;}
-	///\brief Returns the guild's AFK time needed to move a user to the AFK channel.
+	/*!
+	 * \brief Returns the guild's AFK time needed to move a user to the AFK
+	 * channel.
+	 */
 	int afkTimeout() const {return _afkTimeout;}
 	///\brief Returns the guild's member count.
 	int memberCount() const {return _memberCount;}
@@ -66,7 +67,8 @@ public:
 	members() const {return _members;}
 	/*!
 	 * \brief Returns a pointer to a guild channel that has the provided ID.
-	 * May return `nullptr` if the channel was not found.
+	 *
+	 * Returns `nullptr` if the channel was not found.
 	 */
 	QSharedPointer<QDiscordChannel>
 	channel(const QString& id) const {
@@ -74,39 +76,29 @@ public:
 	}
 	/*!
 	 * \brief Returns a pointer to a guild member that has the provided ID.
-	 * May return `nullptr` if the member was not found.
+	 *
+	 * Returns `nullptr` if the member was not found.
 	 */
 	QSharedPointer<QDiscordMember>
 	member(const QString& id) const {
 		return _members.value(id, QSharedPointer<QDiscordMember>());
 	}
-	/*!
-	 * \brief Adds the provided channel to the guild.
-	 *
-	 * The guild will handle destroying the pointed channel when the guild gets destroyed.
-	 */
+	///\brief Adds the provided channel to the guild.
 	void addChannel(QSharedPointer<QDiscordChannel> channel);
 	/*!
 	 * \brief Removes the provided channel from the guild.
 	 *
-	 * If the guild contains the provided channel, the pointed channel will be destroyed.
-	 * \returns `true` if the channel was successfully removed. `false` if `nullptr` was
-	 * passed or the channel was not found.
+	 * Returns `true` if the channel was successfully removed. `false` if
+	 * `nullptr` was passed or the channel was not found.
 	 */
 	bool removeChannel(QSharedPointer<QDiscordChannel> channel);
-	/*!
-	 * \brief Adds the provided member to the guild.
-	 *
-	 * The guild will handle destroying the pointed member when the guild gets destroyed.
-	 * If the member already exists, the previous member will be destroyed.
-	 */
+	///\brief Adds the provided member to the guild.
 	void addMember(QSharedPointer<QDiscordMember> member);
 	/*!
 	 * \brief Removes the provided member from the guild.
 	 *
-	 * If the guild contains the provided member, the pointed member will be destroyed.
-	 * \returns `true` if the member was successfully removed. `false` if `nullptr` was
-	 * passed or the member was not found.
+	 * Returns `true` if the member was successfully removed. `false` if
+	 * `nullptr` was passed or the member was not found.
 	 */
 	bool removeMember(QSharedPointer<QDiscordMember> member);
 private:

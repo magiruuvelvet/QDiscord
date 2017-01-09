@@ -29,20 +29,22 @@
 /*!
  * \brief The state component of QDiscord.
  *
- * This class contains and manages all information related to the current state of the client.
+ * This class contains and manages all information related to the current state
+ * of the client.\n
+ * You may connect to the signals in order to get notified of any modification
+ * to the state. Alternatively, you may query the state for a particular object
+ * using this class' methods.
  */
 class QDiscordStateComponent : public QObject
 {
 	Q_OBJECT
 	friend class QDiscord;
 public:
-	///\brief Standard QObject constructor.
 	explicit QDiscordStateComponent(QObject* parent = 0);
 	~QDiscordStateComponent();
 	/*!
 	 * \brief Returns a pointer to the guild that has the provided ID.
-	 * May return `nullptr` if nothing was found.
-	 * \returns `nullptr` if nothing was found.
+	 * Returns `nullptr` if nothing was found.
 	 */
 	QSharedPointer<QDiscordGuild> guild(const QString& id) {
 		return _guilds.value(id, QSharedPointer<QDiscordGuild>());
@@ -51,8 +53,7 @@ public:
 	QMap<QString, QSharedPointer<QDiscordGuild>> guilds() {return _guilds;}
 	/*!
 	 * \brief Returns a pointer to the channel that has the provided ID.
-	 * May return `nullptr` if nothing was found.
-	 * \returns A private channel, a guild channel or `nullptr` if nothing was found.
+	 * Returns `nullptr` if nothing was found.
 	 */
 	QSharedPointer<QDiscordChannel> channel(const QString& id);
 	///\brief Returns a map of pointers to all private channels and their IDs.
@@ -65,21 +66,24 @@ signals:
 	/*!
 	 * \brief Emitted when a guild has been created.
 	 *
-	 * The guild may be unavailable as this signal is emitted when any guild is created.\n
-	 * Explicit checks will be required due to this.
+	 * The guild may be unavailable as this signal is emitted when any guild is
+	 * created.\n
+	 * Explicit checks will be required if you listen to this signal.
 	 * \param guild A pointer to the guild that has been created.
 	 */
 	void guildCreated(QSharedPointer<QDiscordGuild> guild);
 	/*!
 	 * \brief Emitted when a guild has become available.
 	 *
-	 * It should be safe to assume that all guilds provided by this signal will be available.
+	 * It should be safe to assume that all guilds provided by this signal will
+	 * be available.
 	 * \param guild A pointer to the guild that has become available.
 	 */
 	void guildAvailable(QSharedPointer<QDiscordGuild> guild);
 	/*!
 	 * \brief Emitted when a guild has been deleted.
-	 * \param guild An object containing information about the guild that was deleted.
+	 * \param guild An object containing information about the guild that was
+	 * deleted.
 	 */
 	void guildDeleted(QDiscordGuild guild);
 	/*!
@@ -89,7 +93,8 @@ signals:
 	void guildMemberAdded(QSharedPointer<QDiscordMember> member);
 	/*!
 	 * \brief Emitted when a member has been removed from a guild.
-	 * \param member An object containing information ab out the member that was deleted.
+	 * \param member An object containing information ab out the member that was
+	 * deleted.
 	 */
 	void guildMemberRemoved(QDiscordMember member);
 	/*!
@@ -98,7 +103,8 @@ signals:
 	 */
 	void guildMemberUpdated(QSharedPointer<QDiscordMember> member);
 	/*!
-	 * \brief Emitted when information about the current client has been collected.
+	 * \brief Emitted when information about the current client has been
+	 * collected.
 	 *
 	 * This usually gets emitted whenever the READY event gets processed.
 	 * \param self An object of this client's user.
@@ -111,7 +117,8 @@ signals:
 	void channelCreated(QSharedPointer<QDiscordChannel> channel);
 	/*!
 	 * \brief Emitted when a channel has been deleted.
-	 * \param channel An object containing information about the channel that was deleted.
+	 * \param channel An object containing information about the channel that
+	 * was deleted.
 	 */
 	void channelDeleted(QDiscordChannel channel);
 	/*!
@@ -141,8 +148,8 @@ signals:
 	void messageCreated(QDiscordMessage message);
 	/*!
 	 * \brief Emitted when a message has been created.
-	 * \param message An object containing information about the deleted message. Usually,
-	 * the only valid information is the ID.
+	 * \param message An object containing information about the deleted
+	 * message. Usually, the only valid information contained is the ID.
 	 */
 	void messageDeleted(QDiscordMessage message);
 	/*!

@@ -31,7 +31,6 @@ public:
 	 * \param object A JSON object of a Discord user.
 	 */
 	QDiscordUser(const QJsonObject& object);
-	///\brief Default public constructor
 	QDiscordUser();
 	~QDiscordUser();
 	///\brief Updates the current instance from the provided parameters.
@@ -50,7 +49,10 @@ public:
 	QString username() const {return _username;}
 	///\brief Returns whether the user has verified their e-mail.
 	bool verified() const {return _verified;}
-	///\brief Returns a string which allows you to mention this user using their username.
+	/*!
+	 * \brief Returns a string which allows you to mention this user using their
+	 * username.
+	 */
 	QString mention() const {return QString("<@"+_id+">");}
 	///\brief Compares two users based on their ID
 	bool operator ==(const QDiscordUser& other) const;
