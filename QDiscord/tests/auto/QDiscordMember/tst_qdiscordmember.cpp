@@ -104,6 +104,12 @@ void tst_QDiscordMember::testConstructor()
 	QFETCH(QDateTime, output_joinedAt);
 	QFETCH(QString, output_nickname);
 
+	QBENCHMARK
+	{
+		QDiscordMember member(input_object, QSharedPointer<QDiscordGuild>());
+		Q_UNUSED(member);
+	}
+
 	QDiscordMember member(input_object, QSharedPointer<QDiscordGuild>());
 
 	if(!user_is_null)

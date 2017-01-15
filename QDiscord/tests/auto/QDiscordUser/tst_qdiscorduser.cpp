@@ -85,6 +85,12 @@ void tst_QDiscordUser::testConstructor()
 	QFETCH(QString, output_username);
 	QFETCH(bool, output_verified);
 
+	QBENCHMARK
+	{
+		QDiscordUser testBot(input_object);
+		Q_UNUSED(testBot);
+	}
+
 	QDiscordUser testBot(input_object);
 
 	QCOMPARE(testBot.id(), output_id);
