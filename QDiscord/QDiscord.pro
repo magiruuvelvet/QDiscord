@@ -6,12 +6,15 @@
 
 TEMPLATE = subdirs
 
+include(config.pri)
+
 SUBDIRS += src
-CONFIG(debug, debug|release) {
+equals(QDISCORD_LIBRARY_BUILD_TESTS, "true") {
     SUBDIRS += tests
     tests.depends = src
 }
 
-OTHER_FILES += Doxyfile
-
-include(doc/doc.pri)
+equals(QDISCORD_LIBRARY_GEN_DOCS, "true") {
+    OTHER_FILES += Doxyfile
+    include(doc/doc.pri)
+}

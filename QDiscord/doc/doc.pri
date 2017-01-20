@@ -1,4 +1,4 @@
-include(../src/config.pri)
+include(../config.pri)
 
 OTHER_FILES += $$PWD/mainpage.dox
 OTHER_FILES += $$PWD/installing.dox

@@ -43,4 +43,4 @@ CMakeLists.txt.user
 QDiscord/docs
 
 # Configuration file. Commit with git add --force.
-QDiscord/src/config.pri
+QDiscord/config.pri
