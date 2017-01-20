@@ -199,8 +199,8 @@ void QDiscordRestComponent::deleteMessage(QDiscordMessage message)
 	deleteMessage(message.id(), message.channelId());
 }
 
-void QDiscordRestComponent::deleteMessage(const QString& messageId,
-										  const QString& channelId)
+void QDiscordRestComponent::deleteMessage(const QString& channelId,
+										  const QString& messageId)
 {
 	if(!_loggedIn)
 		return;
@@ -220,15 +220,14 @@ void QDiscordRestComponent::deleteMessage(const QString& messageId,
 	});
 }
 
-void QDiscordRestComponent::editMessage(QDiscordMessage message,
-										const QString& newContent)
+void QDiscordRestComponent::editMessage(const QString& newContent, QDiscordMessage message)
 {
 	editMessage(message.id(), message.channelId(), newContent);
 }
 
-void QDiscordRestComponent::editMessage(const QString& messageId,
+void QDiscordRestComponent::editMessage(const QString& newContent,
 										const QString& channelId,
-										const QString& newContent)
+										const QString& messageId)
 {
 	if(!_loggedIn)
 		return;
@@ -674,7 +673,7 @@ void QDiscordRestComponent::deleteResource(const QUrl& url,
 	connect(_manager.deleteResource(request), &QNetworkReply::finished,
 			this, function);
 #ifdef QDISCORD_LIBRARY_DEBUG
-	qDebug()<<this<<"DELETE to "<<url;
+	qDebug()<<this<<"DELETE to"<<url;
 #endif
 }
 
@@ -701,7 +700,7 @@ void QDiscordRestComponent::patch(const QJsonObject &object, const QUrl &url, st
 	connect(reply, &QNetworkReply::finished, this, function);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
-	qDebug()<<this<<"patch: "<<object<<" to "<<url;
+	qDebug()<<this<<"patch:"<<object<<"to"<<url;
 #endif
 }
 
@@ -728,7 +727,7 @@ void QDiscordRestComponent::patch(const QJsonArray &array, const QUrl &url, std:
 	connect(reply, &QNetworkReply::finished, this, function);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
-	qDebug()<<this<<"patch: "<<array<<" to "<<url;
+	qDebug()<<this<<"patch:"<<array<<"to"<<url;
 #endif
 }
 
@@ -752,7 +751,7 @@ void QDiscordRestComponent::post(const QJsonObject& object,
 	connect(reply, &QNetworkReply::finished, this, function);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
-	qDebug()<<this<<"posted: "<<object<<" to "<<url;
+	qDebug()<<this<<"posted:"<<object<<"to"<<url;
 #endif
 }
 
@@ -776,7 +775,7 @@ void QDiscordRestComponent::post(const QJsonArray& array,
 	connect(reply, &QNetworkReply::finished, this, function);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
-	qDebug()<<this<<"posted: "<<array<<" to "<<url;
+	qDebug()<<this<<"posted:"<<array<<"to"<<url;
 #endif
 }
 
@@ -795,6 +794,6 @@ void QDiscordRestComponent::get(const QUrl& url,
 	connect(reply, &QNetworkReply::finished, this, function);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
-	qDebug()<<this<<"GET to "<<url;
+	qDebug()<<this<<"GET to"<<url;
 #endif
 }

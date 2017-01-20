@@ -89,16 +89,16 @@ public:
 	///\brief Deletes the specified message.
 	void deleteMessage(QDiscordMessage message);
 	///\brief Deletes the specified message by ID and channel ID.
-	void deleteMessage(const QString& messageId, const QString& channelId);
+	void deleteMessage(const QString& channelId, const QString& messageId);
 	///\brief Edits the specified message to contain the specified content
-	void editMessage(QDiscordMessage message, const QString& newContent);
+	void editMessage(const QString& newContent, QDiscordMessage message);
 	/*!
 	 * \brief Edits the message specified by channel ID and mesage ID to contain
 	 * the specified content.
 	 */
-	void editMessage(const QString& messageId,
+	void editMessage(const QString& newContent,
 					 const QString& channelId,
-					 const QString& newContent);
+					 const QString& messageId);
 	///\brief Logs out using the stored token.
 	void logout();
 	/*!
