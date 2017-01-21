@@ -20,7 +20,7 @@
 #include "qdiscordguild.hpp"
 
 QDiscordMember::QDiscordMember(const QJsonObject& object,
-							   QSharedPointer<QDiscordGuild> guild)
+							   QWeakPointer<QDiscordGuild> guild)
 {
 	_deaf = object["deaf"].toBool(false);
 	_mute = object["mute"].toBool(false);
@@ -28,11 +28,14 @@ QDiscordMember::QDiscordMember(const QJsonObject& object,
 	_joinedAt = QDateTime::fromString(object["joined_at"].toString(""),
 			Qt::ISODate);
 	_guild = guild;
-	_user = object["user"].isObject() ?
-				QSharedPointer<QDiscordUser>(
+	if(object["user"].isObject())
+	{
+		_user = QSharedPointer<QDiscordUser>(
 					new QDiscordUser(object["user"].toObject())
-				) :
-				QSharedPointer<QDiscordUser>();
+				);
+	}
+	else
+		_user = QSharedPointer<QDiscordUser>();
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordMember("<<this<<") constructed";
@@ -46,7 +49,7 @@ QDiscordMember::QDiscordMember()
 	_nickname = "";
 	_joinedAt = QDateTime();
 	_user = QSharedPointer<QDiscordUser>();
-	_guild = QSharedPointer<QDiscordGuild>();
+	_guild = QWeakPointer<QDiscordGuild>();
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordMember("<<this<<") constructed";
@@ -58,9 +61,10 @@ QDiscordMember::QDiscordMember(const QDiscordMember& other)
 	_deaf = other.deaf();
 	_mute = other.mute();
 	_joinedAt = other.joinedAt();
-	_user = other.user() ?
-				QSharedPointer<QDiscordUser>(new QDiscordUser(*other.user())) :
-				QSharedPointer<QDiscordUser>();
+	if(other.user())
+		_user = QSharedPointer<QDiscordUser>(new QDiscordUser(*other.user()));
+	else
+		_user = QSharedPointer<QDiscordUser>();
 	_guild = other.guild();
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordMember("<<this<<") copy-constructed";
@@ -75,7 +79,7 @@ QDiscordMember::~QDiscordMember()
 }
 
 void QDiscordMember::update(const QJsonObject& object,
-							QSharedPointer<QDiscordGuild> guild)
+							QWeakPointer<QDiscordGuild> guild)
 {
 	if(object.contains("deaf"))
 		_deaf = object["deaf"].toBool(false);
@@ -100,16 +104,17 @@ void QDiscordMember::update(const QJsonObject& object,
 
 bool QDiscordMember::operator ==(const QDiscordMember& other) const
 {
+	QSharedPointer<QDiscordGuild> strongGuild = _guild.toStrongRef();
 	if(!_user)
 		return false;
 	if(!other.user())
 		return false;
-	if(!_guild)
+	if(!strongGuild)
 		return false;
 	if(!other.guild())
 		return false;
 	if(*_user == *other.user() &&
-			_guild->id() == other.guild()->id())
+			strongGuild->id() == other.guild()->id())
 	{
 		return true;
 	}
@@ -118,18 +123,5 @@ bool QDiscordMember::operator ==(const QDiscordMember& other) const
 
 bool QDiscordMember::operator !=(const QDiscordMember& other) const
 {
-	if(!_user)
-		return true;
-	if(!other.user())
-		return true;
-	if(!_guild)
-		return true;
-	if(!other.guild())
-		return true;
-	if(*_user == *other.user() &&
-			_guild->id() == other.guild()->id())
-	{
-		return false;
-	}
-	return true;
+	return !operator ==(other);
 }

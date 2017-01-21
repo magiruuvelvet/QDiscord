@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QSharedPointer>
+#include <QWeakPointer>
 #include "qdiscorduser.hpp"
 
 class QDiscordGuild;
@@ -41,12 +42,12 @@ public:
 	 * \param object A JSON object of a Discord guild member.
 	 * \param guild A pointer to the member's parent guild.
 	 */
-	QDiscordMember(const QJsonObject& object, QSharedPointer<QDiscordGuild> guild);
+	QDiscordMember(const QJsonObject& object, QWeakPointer<QDiscordGuild> guild);
 	QDiscordMember();
 	QDiscordMember(const QDiscordMember& other);
 	~QDiscordMember();
 	///\brief Updates the current instance from the provided parameters.
-	void update(const QJsonObject& object, QSharedPointer<QDiscordGuild> guild);
+	void update(const QJsonObject& object, QWeakPointer<QDiscordGuild> guild);
 	///\brief Returns whether the member has disabled their speakers.
 	bool deaf() const {return _deaf;}
 	///\brief Returns whether the member has muted their microphone.
@@ -56,7 +57,7 @@ public:
 	///\brief Returns a pointer to the user object contained by this object.
 	QSharedPointer<QDiscordUser> user() const {return _user;}
 	///\brief Returns a pointer to this object's parent guild.
-	QSharedPointer<QDiscordGuild> guild() const {return _guild;}
+	QSharedPointer<QDiscordGuild> guild() const {return _guild.toStrongRef();}
 	///\brief Returns this member's nickname.
 	QString nickname() const {return _nickname;}
 	///\brief Returns a string which allows you to mention this member using their username.
@@ -83,7 +84,7 @@ private:
 	bool _mute;
 	QString _nickname;
 	QSharedPointer<QDiscordUser> _user;
-	QSharedPointer<QDiscordGuild> _guild;
+	QWeakPointer<QDiscordGuild> _guild;
 };
 
 Q_DECLARE_METATYPE(QDiscordMember)
