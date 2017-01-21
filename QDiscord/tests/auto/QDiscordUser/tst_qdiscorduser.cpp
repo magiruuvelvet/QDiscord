@@ -1,5 +1,5 @@
 #include <QtTest>
-#include <QDiscord>
+#include "../../../src/QDiscord"
 
 class tst_QDiscordUser: public QObject
 {
@@ -13,6 +13,8 @@ private slots:
 	void testUpdate();
 	void testOperatorEquals_data();
 	void testOperatorEquals();
+	void testMention_data();
+	void testMention();
 private:
 	QJsonObject _testUser;
 	QJsonObject _nullUser;
@@ -56,22 +58,25 @@ void tst_QDiscordUser::testConstructor_data()
 	QTest::addColumn<QString>("output_username");
 	QTest::addColumn<bool>("output_verified");
 
-	QTest::newRow("testbot") << _testUser <<
-								"111264179623531612" <<
-								"577444852b" <<
-								true <<
-								"8701" <<
-								"bot@example.org" <<
-								"TestBot" <<
-								true;
-	QTest::newRow("nulluser") << _nullUser <<
-								"" <<
-								"" <<
-								false <<
-								"" <<
-								"" <<
-								"" <<
-								false;
+	QTest::newRow("testbot")
+	<< _testUser
+	<< "111264179623531612"
+	<< "577444852b"
+	<< true
+	<< "8701"
+	<< "bot@example.org"
+	<< "TestBot"
+	<< true;
+
+	QTest::newRow("nulluser")
+	<< _nullUser
+	<< QString()
+	<< QString()
+	<< false
+	<< QString()
+	<< QString()
+	<< QString()
+	<<false;
 }
 
 void tst_QDiscordUser::testConstructor()
@@ -95,11 +100,11 @@ void tst_QDiscordUser::testConstructor()
 
 	QCOMPARE(testBot.id(), output_id);
 	QCOMPARE(testBot.avatar(), output_avatar);
-	QVERIFY(testBot.bot() == output_bot);
+	QCOMPARE(testBot.bot(), output_bot);
 	QCOMPARE(testBot.discriminator(), output_discriminator);
 	QCOMPARE(testBot.email(), output_email);
 	QCOMPARE(testBot.username(), output_username);
-	QVERIFY(testBot.verified() == output_verified);
+	QCOMPARE(testBot.verified(), output_verified);
 }
 
 void tst_QDiscordUser::testUpdate_data()
@@ -116,15 +121,16 @@ void tst_QDiscordUser::testUpdate_data()
 
 	QDiscordUser nullUser(_nullUser);
 
-	QTest::newRow("test1") << nullUser <<
-							  _testUser <<
-							  "111264179623531612" <<
-							  "577444852b" <<
-							  true <<
-							  "8701" <<
-							  "bot@example.org" <<
-							  "TestBot" <<
-							  true;
+	QTest::newRow("test1")
+	<< nullUser
+	<< _testUser
+	<< "111264179623531612"
+	<< "577444852b"
+	<< true
+	<< "8701"
+	<< "bot@example.org"
+	<< "TestBot"
+	<< true;
 }
 
 void tst_QDiscordUser::testUpdate()
@@ -143,11 +149,11 @@ void tst_QDiscordUser::testUpdate()
 
 	QCOMPARE(original.id(), output_id);
 	QCOMPARE(original.avatar(), output_avatar);
-	QVERIFY(original.bot() == output_bot);
+	QCOMPARE(original.bot(), output_bot);
 	QCOMPARE(original.discriminator(), output_discriminator);
 	QCOMPARE(original.email(), output_email);
 	QCOMPARE(original.username(), output_username);
-	QVERIFY(original.verified() == output_verified);
+	QCOMPARE(original.verified(), output_verified);
 }
 
 void tst_QDiscordUser::testOperatorEquals_data()
@@ -168,6 +174,24 @@ void tst_QDiscordUser::testOperatorEquals()
 
 	QVERIFY(nullUser != testUser);
 	QVERIFY(!(nullUser == testUser));
+}
+
+void tst_QDiscordUser::testMention_data()
+{
+	QTest::addColumn<QDiscordUser>("user");
+	QTest::addColumn<QString>("mention");
+
+	QDiscordUser user(_testUser);
+
+	QTest::newRow("test1") << user << "<@111264179623531612>";
+}
+
+void tst_QDiscordUser::testMention()
+{
+	QFETCH(QDiscordUser, user);
+	QFETCH(QString, mention);
+
+	QCOMPARE(user.mention(), mention);
 }
 
 QTEST_MAIN(tst_QDiscordUser)
