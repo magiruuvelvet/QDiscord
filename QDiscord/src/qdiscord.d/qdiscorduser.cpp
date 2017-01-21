@@ -85,5 +85,5 @@ bool QDiscordUser::operator ==(const QDiscordUser& other) const
 
 bool QDiscordUser::operator !=(const QDiscordUser& other) const
 {
-	return other.id() != _id;
+	return !operator ==(other);
 }
