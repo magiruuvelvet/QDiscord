@@ -1,5 +1,5 @@
 #include <QtTest>
-#include <QDiscord>
+#include "../../../src/QDiscord"
 
 class tst_QDiscordMember : public QObject
 {
@@ -66,32 +66,32 @@ void tst_QDiscordMember::testConstructor_data()
 	QTest::addColumn<QDateTime>("output_joinedAt");
 	QTest::addColumn<QString>("output_nickname");
 
-	QTest::newRow("nullMember") << _nullMember <<
-								   _testUser <<
-								   true <<
-								   false <<
-								   false <<
-								   QDateTime() <<
-								   "";
+	QTest::newRow("nullMember")
+	<< _nullMember
+	<< _testUser
+	<< true
+	<< false
+	<< false
+	<< QDateTime()
+	<< QString();
 
-	QTest::newRow("testMember") << _testMember <<
-								   _testUser <<
-								   false <<
-								   true <<
-								   true <<
-								   QDateTime::fromString(
-									   "2016-07-22T18:15:12.448000+00:00",
-									   Qt::ISODate) <<
-								   "testbot";
-	QTest::newRow("userlessMember") << _userlessMember <<
-								   _testUser <<
-								   true <<
-								   true <<
-								   true <<
-								   QDateTime::fromString(
-									   "2016-07-22T18:15:12.448000+00:00",
-									   Qt::ISODate) <<
-								   "testbot";
+	QTest::newRow("testMember")
+	<< _testMember
+	<< _testUser
+	<< false
+	<< true
+	<< true
+	<< QDateTime::fromString("2016-07-22T18:15:12.448000+00:00", Qt::ISODate)
+	<< "testbot";
+
+	QTest::newRow("userlessMember")
+	<< _userlessMember
+	<< _testUser
+	<< true
+	<< true
+	<< true
+	<< QDateTime::fromString("2016-07-22T18:15:12.448000+00:00", Qt::ISODate)
+	<< "testbot";
 }
 
 void tst_QDiscordMember::testConstructor()
@@ -106,19 +106,19 @@ void tst_QDiscordMember::testConstructor()
 
 	QBENCHMARK
 	{
-		QDiscordMember member(input_object, QSharedPointer<QDiscordGuild>());
+		QDiscordMember member(input_object, QWeakPointer<QDiscordGuild>());
 		Q_UNUSED(member);
 	}
 
-	QDiscordMember member(input_object, QSharedPointer<QDiscordGuild>());
+	QDiscordMember member(input_object, QWeakPointer<QDiscordGuild>());
 
 	if(!user_is_null)
-		QVERIFY(*member.user() == output_user);
+		QCOMPARE(*member.user(), output_user);
 	else
 		QVERIFY(member.user() == nullptr);
-	QVERIFY(member.deaf() == output_deaf);
-	QVERIFY(member.mute() == output_mute);
-	QVERIFY(member.joinedAt() == output_joinedAt);
+	QCOMPARE(member.deaf(), output_deaf);
+	QCOMPARE(member.mute(), output_mute);
+	QCOMPARE(member.joinedAt(), output_joinedAt);
 	QCOMPARE(member.nickname(), output_nickname);
 }
 
@@ -128,12 +128,15 @@ void tst_QDiscordMember::testMentions_data()
 	QTest::addColumn<QString>("output_nickname");
 	QTest::addColumn<QString>("output_username");
 
-	QTest::newRow("testMember") << QDiscordMember(_testMember, QSharedPointer<QDiscordGuild>()) <<
-								   "<@!111264179623531612>" <<
-								   "<@111264179623531612>";
-	QTest::newRow("nullMember") << QDiscordMember(_nullMember, QSharedPointer<QDiscordGuild>()) <<
-								   "<@!nullptr>" <<
-								   "<@nullptr>";
+	QTest::newRow("testMember")
+	<< QDiscordMember(_testMember, QWeakPointer<QDiscordGuild>())
+	<< "<@!111264179623531612>"
+	<< "<@111264179623531612>";
+
+	QTest::newRow("nullMember")
+	<< QDiscordMember(_nullMember, QWeakPointer<QDiscordGuild>())
+	<< "<@!nullptr>"
+	<< "<@nullptr>";
 }
 
 void tst_QDiscordMember::testMentions()
@@ -151,8 +154,9 @@ void tst_QDiscordMember::testOperatorEquals_data()
 	QTest::addColumn<QDiscordMember>("null_member");
 	QTest::addColumn<QDiscordMember>("test_member");
 
-	QTest::newRow("test1") << QDiscordMember(_nullMember, _guild) <<
-							  QDiscordMember(_testMember, _guild);
+	QTest::newRow("test1")
+	<< QDiscordMember(_nullMember, _guild)
+	<< QDiscordMember(_testMember, _guild);
 }
 
 void tst_QDiscordMember::testOperatorEquals()
