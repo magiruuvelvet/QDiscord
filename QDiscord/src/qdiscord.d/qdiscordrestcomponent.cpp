@@ -196,7 +196,7 @@ void QDiscordRestComponent::sendMessage(const QString& content,
 
 void QDiscordRestComponent::deleteMessage(QDiscordMessage message)
 {
-	deleteMessage(message.id(), message.channelId());
+	deleteMessage(message.channelId(), message.id());
 }
 
 void QDiscordRestComponent::deleteMessage(const QString& channelId,
@@ -222,7 +222,7 @@ void QDiscordRestComponent::deleteMessage(const QString& channelId,
 
 void QDiscordRestComponent::editMessage(const QString& newContent, QDiscordMessage message)
 {
-	editMessage(message.id(), message.channelId(), newContent);
+	editMessage(newContent, message.channelId(), message.id());
 }
 
 void QDiscordRestComponent::editMessage(const QString& newContent,
