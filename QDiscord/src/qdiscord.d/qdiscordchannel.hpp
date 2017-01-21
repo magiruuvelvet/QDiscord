@@ -83,7 +83,19 @@ public:
 	 * private channel.
 	 */
 	QSharedPointer<QDiscordUser> recipient() const {return _recipient;}
+	/*!
+	 * \brief Returns the channel's bitrate
+	 *
+	 * Returns -1 if the channel's type is not
+	 * DiscordChannel::ChannelType::Voice.
+	 */
 	int bitrate() const {return _bitrate;}
+	/*!
+	 * \brief Returns the channel's user limit.
+	 *
+	 * Returns -1 if the channel's type is not
+	 * QDiscordChannel::ChannelType::Voice.
+	 */
 	int userLimit() const {return _userLimit;}
 	QDateTime lastPinTimestamp() const {return _lastPinTimestamp;}
 	/*!
