@@ -20,26 +20,43 @@
 #include "qdiscordchannel.hpp"
 
 QDiscordChannel::QDiscordChannel(const QJsonObject& object,
-								 QSharedPointer<QDiscordGuild> guild)
+								 QWeakPointer<QDiscordGuild> guild)
 {
 	_id = object["id"].toString("");
 	_isPrivate = object["is_private"].toBool(false);
 	_lastMessageId = object["last_message_id"].toString("");
 	_name = object["name"].toString("");
-	_position = object["position"].toInt(0);
+	_position = object["position"].toInt(-1);
 	_topic = object["topic"].toString("");
-	QString type = object["type"].toString("text");
+	QString type = object["type"].toString("");
+	_bitrate = -1;
+	_userLimit = -1;
+	_lastPinTimestamp = QDateTime();
 	if(type == "text")
+	{
 		_type = ChannelType::Text;
+		_lastPinTimestamp = QDateTime::fromString(
+					object["last_pin_timestamp"].toString(""),
+					Qt::ISODate
+				);
+	}
 	else if(type == "voice")
+	{
 		_type = ChannelType::Voice;
+		_bitrate = object["bitrate"].toInt(-1);
+		_userLimit = object["user_limit"].toInt(-1);
+	}
 	else
 		_type = ChannelType::UnknownType;
 	_guild = guild;
-	_recipient = _isPrivate ?
-				QSharedPointer<QDiscordUser>(
+	if(_isPrivate)
+	{
+		_recipient = QSharedPointer<QDiscordUser>(
 					new QDiscordUser(object["recipient"].toObject())
-				) : QSharedPointer<QDiscordUser>();
+				);
+	}
+	else
+		_recipient = QSharedPointer<QDiscordUser>();
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordChannel("<<this<<") constructed";
@@ -55,8 +72,10 @@ QDiscordChannel::QDiscordChannel()
 	_position = 0;
 	_topic = "";
 	_type = ChannelType::UnknownType;
-	_guild = QSharedPointer<QDiscordGuild>();
+	_guild = QWeakPointer<QDiscordGuild>();
 	_recipient = QSharedPointer<QDiscordUser>();
+	_bitrate = -1;
+	_userLimit = -1;
 
 #ifdef QDISCORD_LIBRARY_DEBUG
 	qDebug()<<"QDiscordChannel("<<this<<") constructed";
@@ -74,6 +93,8 @@ QDiscordChannel::QDiscordChannel(const QDiscordChannel& other)
 	_type = other.type();
 	_guild = other.guild();
 	_recipient = other.recipient();
+	_bitrate = other.bitrate();
+	_userLimit = other.userLimit();
 }
 
 QDiscordChannel::~QDiscordChannel()
@@ -82,4 +103,14 @@ QDiscordChannel::~QDiscordChannel()
 	qDebug()<<"QDiscordChannel("<<this<<") destroyed";
 #endif
 	_recipient.clear();
+}
+
+bool QDiscordChannel::operator ==(const QDiscordChannel& other) const
+{
+	return _id == other.id();
+}
+
+bool QDiscordChannel::operator !=(const QDiscordChannel& other) const
+{
+	return !operator ==(other);
 }

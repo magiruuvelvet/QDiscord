@@ -20,6 +20,7 @@
 #define QDISCORDCHANNEL_HPP
 
 #include <QJsonObject>
+#include <QDateTime>
 #include "qdiscorduser.hpp"
 
 class QDiscordGuild;
@@ -35,10 +36,9 @@ public:
 	 * \note Some properties may be defaul, not accessible or `nullptr`,
 	 * depending on what type() and isPrivate() return.
 	 */
-	QDiscordChannel(
-			const QJsonObject& object,
-			QSharedPointer<QDiscordGuild> guild =
-				QSharedPointer<QDiscordGuild>()
+	QDiscordChannel(const QJsonObject& object,
+			QWeakPointer<QDiscordGuild> guild =
+				QWeakPointer<QDiscordGuild>()
 			);
 	QDiscordChannel();
 	QDiscordChannel(const QDiscordChannel& other);
@@ -83,6 +83,9 @@ public:
 	 * private channel.
 	 */
 	QSharedPointer<QDiscordUser> recipient() const {return _recipient;}
+	int bitrate() const {return _bitrate;}
+	int userLimit() const {return _userLimit;}
+	QDateTime lastPinTimestamp() const {return _lastPinTimestamp;}
 	/*!
 	 * \brief Sets this object's parent guild.
 	 * \param guild A pointer to this object's new parent guild.
@@ -90,6 +93,10 @@ public:
 	void setGuild(QSharedPointer<QDiscordGuild> guild) {_guild = guild;}
 	///\brief Returns a string which allows you to mention this channel.
 	QString mention() const {return QString("<#"+_id+">");}
+	///\brief Compares two channels based on their ID.
+	bool operator ==(const QDiscordChannel& other) const;
+	///\brief Compares two channels based on their ID.
+	bool operator !=(const QDiscordChannel& other) const;
 private:
 	QString _id;
 	QString _name;
@@ -98,10 +105,14 @@ private:
 	ChannelType _type;
 	bool _isPrivate;
 	QString _lastMessageId;
+	int _bitrate;
+	int _userLimit;
+	QDateTime _lastPinTimestamp;
 	QSharedPointer<QDiscordUser> _recipient;
 	QSharedPointer<QDiscordGuild> _guild;
 };
 
+Q_DECLARE_METATYPE(QDiscordChannel::ChannelType)
 Q_DECLARE_METATYPE(QDiscordChannel)
 
 #endif // QDISCORDCHANNEL_HPP
