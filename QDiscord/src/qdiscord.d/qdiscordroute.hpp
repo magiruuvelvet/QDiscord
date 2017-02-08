@@ -28,7 +28,7 @@
  */
 
 #include <QString>
-#include "qdiscordutilities.hpp"
+#include "qdiscordid.hpp"
 
 class QDiscordRoute
 {
@@ -88,7 +88,7 @@ namespace QDiscordRoutes {
 		QDiscordRoute getSelf();
 		QDiscordRoute modifySelf();
 		QDiscordRoute getGuilds();
-		QDiscordRoute leaveGuild(const quint64& guild);
+		QDiscordRoute leaveGuild(const QDiscordID& guild);
 		QDiscordRoute getPrivateChannels();
 		QDiscordRoute createPrivateChannel();
 		QDiscordRoute gateway();
@@ -100,122 +100,139 @@ namespace QDiscordRoutes {
 	}
 
 	namespace Users {
-		QDiscordRoute getUser(const quint64& user);
+		QDiscordRoute getUser(const QDiscordID& user);
 	}
 
 	namespace Guilds {
-		QDiscordRoute getGuild(const quint64& guild);
-		QDiscordRoute modifyGuild(const quint64& guild);
-		QDiscordRoute createChannel(const quint64& guild);
-		QDiscordRoute getChannels(const quint64& guild);
-		QDiscordRoute modifyChannels(const quint64& guild);
-		QDiscordRoute getBans(const quint64& guild);
-		QDiscordRoute ban(const quint64& guild, const quint64& user);
+		QDiscordRoute getGuild(const QDiscordID& guild);
+		QDiscordRoute modifyGuild(const QDiscordID& guild);
+		QDiscordRoute createChannel(const QDiscordID& guild);
+		QDiscordRoute getChannels(const QDiscordID& guild);
+		QDiscordRoute modifyChannels(const QDiscordID& guild);
+		QDiscordRoute getBans(const QDiscordID& guild);
+		QDiscordRoute ban(const QDiscordID& guild, const QDiscordID& user);
 		QDiscordRoute banWithDelete(
-				const quint64& guild,
-				const quint64& user,
+				const QDiscordID& guild,
+				const QDiscordID& user,
 				int days
 		);
-		QDiscordRoute unban(const quint64& guild, const quint64& user);
-		QDiscordRoute kickMember(const quint64& guild, const quint64& user);
-		QDiscordRoute modifyMember(const quint64& guild, const quint64& user);
-		QDiscordRoute modifySelfNick(const quint64& guild);
-		QDiscordRoute prunableCount(const quint64& guild, int days);
-		QDiscordRoute pruneMembers(const quint64& guild, int days);
+		QDiscordRoute unban(const QDiscordID& guild, const QDiscordID& user);
+		QDiscordRoute kickMember(
+				const QDiscordID& guild,
+				const QDiscordID& user
+		);
+		QDiscordRoute modifyMember(
+				const QDiscordID& guild,
+				const QDiscordID& user
+		);
+		QDiscordRoute modifySelfNick(const QDiscordID& guild);
+		QDiscordRoute prunableCount(const QDiscordID& guild, int days);
+		QDiscordRoute pruneMembers(const QDiscordID& guild, int days);
 
 		//Client-only
 		QDiscordRoute createGuild();
-		QDiscordRoute deleteGuild(const quint64& guild);
+		QDiscordRoute deleteGuild(const QDiscordID& guild);
 	}
 
 	namespace Emotes {
-		QDiscordRoute modifyEmote(const quint64& guild, const quint64& emote);
-		QDiscordRoute deleteEmote(const quint64& guild, const quint64& emote);
-		QDiscordRoute createEmote(const quint64& guild);
+		QDiscordRoute modifyEmote(
+				const QDiscordID& guild,
+				const QDiscordID& emote
+		);
+		QDiscordRoute deleteEmote(
+				const QDiscordID& guild,
+				const QDiscordID& emote
+		);
+		QDiscordRoute createEmote(const QDiscordID& guild);
 	}
 
 	namespace Roles {
-		QDiscordRoute getRoles(const quint64& guild);
-		QDiscordRoute createRole(const quint64& guild);
-		QDiscordRoute getRole(const quint64& guild, const quint64& role);
-		QDiscordRoute modifyRole(const quint64& guild, const quint64& role);
-		QDiscordRoute deleteRole(const quint64& guild, const quint64& role);
+		QDiscordRoute getRoles(const QDiscordID& guild);
+		QDiscordRoute createRole(const QDiscordID& guild);
+		QDiscordRoute getRole(const QDiscordID& guild, const QDiscordID& role);
+		QDiscordRoute modifyRole(
+				const QDiscordID& guild,
+				const QDiscordID& role
+		);
+		QDiscordRoute deleteRole(
+				const QDiscordID& guild,
+				const QDiscordID& role
+		);
 	}
 
 	namespace Channels {
-		QDiscordRoute deleteChannel(const quint64& channel);
-		QDiscordRoute modifyChannel(const quint64& channel);
-		QDiscordRoute sendTyping(const quint64& channel);
-		QDiscordRoute getPermissions(const quint64& channel);
+		QDiscordRoute deleteChannel(const QDiscordID& channel);
+		QDiscordRoute modifyChannel(const QDiscordID& channel);
+		QDiscordRoute sendTyping(const QDiscordID& channel);
+		QDiscordRoute getPermissions(const QDiscordID& channel);
 		QDiscordRoute getPermissionsOverride(
-				const quint64& channel,
-				const QString& permissionsOverride
+				const QDiscordID& channel,
+				const QDiscordID& permissionsOverride
 		);
 		QDiscordRoute createPermissionsOverride(
-				const quint64& channel,
-				const QString& permissionsOverride
+				const QDiscordID& channel,
+				const QDiscordID& permissionsOverride
 		);
 		QDiscordRoute modifyPermissionsOverride(
-				const quint64& channel,
-				const QString& permissionsOverride
+				const QDiscordID& channel,
+				const QDiscordID& permissionsOverride
 		);
 		QDiscordRoute deletePermissionsOverride(
-				const quint64& channel,
-				const QString& permissionsOverride
+				const QDiscordID& channel,
+				const QDiscordID& permissionsOverride
 		);
 	}
 
 	namespace Messages {
-		QDiscordRoute sendMessage(const quint64& channel);
-		QDiscordRoute editMessage(const quint64& channel,
-								  const quint64& message);
-		QDiscordRoute deleteMessage(const quint64& channel,
-									const quint64& message);
-                QDiscordRoute bulkDeleteMessages(const quint64 &channel);
-		QDiscordRoute getPinnedMessages(const quint64& channel);
-		QDiscordRoute addPinnedMessage(const quint64& channel,
-									   const quint64& message);
-		QDiscordRoute removePinnedMessage(const quint64& channel,
-										  const quint64& message);
+		QDiscordRoute sendMessage(const QDiscordID& channel);
+		QDiscordRoute editMessage(const QDiscordID& channel,
+								  const QDiscordID& message);
+		QDiscordRoute deleteMessage(const QDiscordID& channel,
+									const QDiscordID& message);
+		QDiscordRoute getPinnedMessages(const QDiscordID& channel);
+		QDiscordRoute addPinnedMessage(const QDiscordID& channel,
+									   const QDiscordID& message);
+		QDiscordRoute removePinnedMessage(const QDiscordID& channel,
+										  const QDiscordID& message);
 
-		QDiscordRoute addReaction(const quint64& channel,
-								  const quint64& message,
+		QDiscordRoute addReaction(const QDiscordID& channel,
+								  const QDiscordID& message,
 								  const QString& reactionCode);
-		QDiscordRoute removeReaction(const quint64& channel,
-									 const quint64& message,
+		QDiscordRoute removeReaction(const QDiscordID& channel,
+									 const QDiscordID& message,
 									 const QString& reactionCode,
-									const quint64& user);
-		QDiscordRoute removeAllReactions(const quint64& channel,
-										 const quint64& message);
-		QDiscordRoute getReactionUsers(const quint64& channel,
-									   const quint64& message,
+									 const QDiscordID& user);
+		QDiscordRoute removeAllReactions(const QDiscordID& channel,
+										 const QDiscordID& message);
+		QDiscordRoute getReactionUsers(const QDiscordID& channel,
+									   const QDiscordID& message,
 									   const QString& reactionCode,
 									   int limit);
 
-		QDiscordRoute getMessageHistory(const quint64& channel,
+		QDiscordRoute getMessageHistory(const QDiscordID& channel,
 										int limit);
-		QDiscordRoute getMessageHistoryBefore(const quint64& channel,
+		QDiscordRoute getMessageHistoryBefore(const QDiscordID& channel,
 											  int limit,
-											  const QString& before);
-		QDiscordRoute getMessageHistoryAfter(const quint64& channel,
+											  const QDiscordID& before);
+		QDiscordRoute getMessageHistoryAfter(const QDiscordID& channel,
 											 int limit,
-											 const QString& after);
-		QDiscordRoute getMessageHistoryAround(const quint64& channel,
+											 const QDiscordID& after);
+		QDiscordRoute getMessageHistoryAround(const QDiscordID& channel,
 											  int limit,
-											  const QString& around);
+											  const QDiscordID& around);
 
 		//Bot-only
-		QDiscordRoute getMessage(const quint64& channel,
-								 const quint64& message);
-		QDiscordRoute deleteMessages(const quint64& channel);
+		QDiscordRoute getMessage(const QDiscordID& channel,
+								 const QDiscordID& message);
+		QDiscordRoute deleteMessages(const QDiscordID& channel);
 	}
 
 	namespace Invites {
 		QDiscordRoute getInvite(const QString& code);
 		QDiscordRoute deleteInvite(const QString& code);
-		QDiscordRoute getGuildInvites(const quint64& guild);
-		QDiscordRoute getChannelInvites(const quint64& channel);
-		QDiscordRoute createInvite(const quint64& channel);
+		QDiscordRoute getGuildInvites(const QDiscordID& guild);
+		QDiscordRoute getChannelInvites(const QDiscordID& channel);
+		QDiscordRoute createInvite(const QDiscordID& channel);
 
 		//Client-only
 		QDiscordRoute acceptInvite(const QString& code);

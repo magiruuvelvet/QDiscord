@@ -9,111 +9,100 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.	 If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "qdiscordtoken.hpp"
 
 QDiscordToken::QDiscordToken()
 {
-    _type = Type::None;
+	_type = Type::None;
 }
 
-QDiscordToken::QDiscordToken(const QString &token, const QDiscordToken::Type &type)
+QDiscordToken::QDiscordToken(QString token, Type type)
 {
-    // The token passed already has a type, so we'll have to use the string.
-    if (type == Type::Auto)
-    {
-        int spacePos = token.indexOf(' ');
-
-        // No space, no type, thus user token.
-        if (spacePos == -1)
-        {
-            _token = token;
-            _type = Type::None;
-        }
-
-        else // We have a space, let's try to find the type.
-        {
-            QString type = token.mid(0, spacePos);
-            type = type.toLower();
-
-            if (type == "bot")
-            {
-                _token = token.mid(spacePos + 1);
-                _type = Type::Bot;
-            }
-
-            else if (type == "bearer")
-            {
-                _token = token.mid(spacePos + 1);
-                _type = Type::Bearer;
-            }
-
-            else // Not a valid type. We'll assume they meant bot.
-            {
-                _token = token.mid(spacePos + 1);
-                _type = Type::Bot;
-            }
-        }
-    }
-
-    else //The user has given us a type, use that.
-    {
-        _token = token;
-        _type = type;
-    }
+	//The token passed already has a type, so we'll have to use the string.
+	if(type == Type::Auto)
+	{
+		int spacePos = token.indexOf(' ');
+		//No space, no type, thus user token.
+		if(spacePos == -1)
+		{
+			_token = token;
+			_type = Type::None;
+		}
+		else //We have a space, let's try to find the type.
+		{
+			QString type = token.mid(0, spacePos);
+			type = type.toLower();
+			if(type == "bot")
+			{
+				_token = token.mid(spacePos + 1);
+				_type = Type::Bot;
+			}
+			else if(type == "bearer")
+			{
+				_token = token.mid(spacePos + 1);
+				_type = Type::Bearer;
+			}
+			else //Not a valid type. We'll assume they meant bot.
+			{
+				_token = token.mid(spacePos + 1);
+				_type = Type::Bot;
+			}
+		}
+	}
+	else //The user has given us a type, use that.
+	{
+		_token = token;
+		_type = type;
+	}
 }
 
-const QString &QDiscordToken::rawToken() const
+QString QDiscordToken::rawToken() const
 {
-    return _token;
+	return _token;
 }
 
-void QDiscordToken::setRawToken(const QString &token)
+void QDiscordToken::setRawToken(QString token)
 {
-    _token = token;
+	_token = token;
 }
 
-const QDiscordToken::Type &QDiscordToken::type() const
+QDiscordToken::Type QDiscordToken::type() const
 {
-    return _type;
+	return _type;
 }
 
-void QDiscordToken::setType(const QDiscordToken::Type &type)
+void QDiscordToken::setType(QDiscordToken::Type type)
 {
-    _type = type;
+	_type = type;
 }
 
 QString QDiscordToken::fullToken() const
 {
-    switch (_type)
-    {
-        case Type::Bearer:
-            return "Bearer " + _token;
-        case Type::Bot:
-            return "Bot " + _token;
-        default:
-            return _token;
-    }
+	switch(_type)
+	{
+	case Type::Bearer:
+		return "Bearer " + _token;
+	case Type::Bot:
+		return "Bot " + _token;
+	default:
+		return _token;
+	}
 }
 
 bool QDiscordToken::isEmpty() const
 {
-    return _token.isEmpty();
+	return _token.isEmpty();
 }
 
 void QDiscordToken::clear()
 {
-    _token.clear();
-    _type = Type::None;
-}
-
-QDiscordToken::operator QString() const
-{
-    return fullToken();
+	_token.clear();
+	_type = Type::None;
 }

@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.	 If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef QDISCORDTOKEN_HPP
@@ -25,25 +25,23 @@
 class QDiscordToken
 {
 public:
-    enum class Type {
-        Auto,
-        Bearer, Bot, None
-    };
-
-    QDiscordToken();
-    QDiscordToken(const QString &token, const Type &type = Type::Bot);
-    const QString &rawToken() const;
-    void setRawToken(const QString &token);
-    const Type &type() const;
-    void setType(const Type &type);
-    QString fullToken() const;
-    bool isEmpty() const;
-    void clear();
-    operator QString() const;
-
+	enum class Type
+	{
+		Auto,
+		Bearer, Bot, None
+	};
+	QDiscordToken();
+	QDiscordToken(QString token, Type type = Type::Bot);
+	QString rawToken() const;
+	void setRawToken(QString token);
+	Type type() const;
+	void setType(Type type);
+	QString fullToken() const;
+	bool isEmpty() const;
+	void clear();
 private:
-    QString _token;
-    Type _type;
+	QString _token;
+	Type _type;
 };
 
 Q_DECLARE_METATYPE(QDiscordToken)
