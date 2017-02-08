@@ -154,6 +154,65 @@ void QDiscordRestComponent::deleteMessage(const quint64 &channelId,
     });
 }
 
+void QDiscordRestComponent::bulkDeleteMessages(const QList<QDiscordMessage> &messages)
+{
+    if (!_loggedIn)
+        return;
+
+    // ChannelID, Message IDs
+    QMap<quint64, QList<quint64>> toDelete;
+
+    for (QDiscordMessage message : messages)
+    {
+        if (toDelete.contains(message.channelId()))
+        {
+            toDelete[message.channelId()] << message.id();
+        }
+
+        else
+        {
+            QList<quint64> _; _ << message.id();
+            toDelete[message.channelId()] = _;
+        }
+    }
+
+    for (auto i = toDelete.begin(); i != toDelete.end(); i++)
+    {
+        bulkDeleteMessages(i.value(), i.key());
+    }
+
+    toDelete.clear();
+}
+
+void QDiscordRestComponent::bulkDeleteMessages(const QList<quint64> &messageIds, const quint64 &channelId)
+{
+    if (!_loggedIn)
+        return;
+
+    QStringList ids;
+    for (auto&& i : messageIds)
+    {
+        ids << QString::number(i);
+    }
+
+    QJsonObject toDelete;
+    toDelete["messages"] = QJsonArray::fromStringList(ids);
+
+    doRequest(toDelete, QDiscordRoutes::Messages::bulkDeleteMessages(channelId),
+    [this, messageIds](QNetworkReply* reply)
+    {
+        if (reply->error() != QNetworkReply::NoError)
+        {
+            emit bulkMessagesDeleteFailed(reply->error());
+            return;
+        }
+
+        emit bulkMessagesDeleted(messageIds);
+    });
+
+    ids.clear();
+}
+
 void QDiscordRestComponent::editMessage(const QString &newContent,
                                         const QDiscordMessage &message)
 {

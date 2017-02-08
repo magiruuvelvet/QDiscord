@@ -171,6 +171,7 @@ namespace QDiscordRoutes {
 								  const quint64& message);
 		QDiscordRoute deleteMessage(const quint64& channel,
 									const quint64& message);
+                QDiscordRoute bulkDeleteMessages(const quint64 &channel);
 		QDiscordRoute getPinnedMessages(const quint64& channel);
 		QDiscordRoute addPinnedMessage(const quint64& channel,
 									   const quint64& message);

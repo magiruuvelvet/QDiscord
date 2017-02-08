@@ -62,7 +62,7 @@ public:
      * or a guild channel.
      * \param tts Whether to use text to speech when sending the message.
      */
-    void sendMessage(const QString& content,
+    void sendMessage(const QString &content,
                      QSharedPointer<QDiscordChannel> channel,
                      bool tts = false);
 
@@ -81,7 +81,13 @@ public:
     void deleteMessage(const QDiscordMessage &message);
 
     ///\brief Deletes the specified message by ID and channel ID.
-    void deleteMessage(const quint64 &channelId, const quint64& messageId);
+    void deleteMessage(const quint64 &channelId, const quint64 &messageId);
+
+    ///\brief Deletes the specified messages (multi-channel).
+    void bulkDeleteMessages(const QList<QDiscordMessage> &messages);
+
+    ///\brief Deletes the specified messages by ID and channel ID.
+    void bulkDeleteMessages(const QList<quint64> &messageIds, const quint64 &channelId);
 
     ///\brief Edits the specified message to contain the specified content
     void editMessage(const QString &newContent, const QDiscordMessage &message);
@@ -209,12 +215,15 @@ signals:
     void messageDeleteFailed(QNetworkReply::NetworkError error);
     void messageEdited(const QDiscordMessage &message);
     void messageEditFailed(QNetworkReply::NetworkError error);
+    void bulkMessagesDeleted(const QList<quint64> &messageIds);
+    void bulkMessagesDeleteFailed(QNetworkReply::NetworkError error);
+
     /*!
      * \brief Emitted when a channel has been updated.
      * \param channel A reference to the channel that was updated.
      */
-
     void channelUpdated(const QDiscordChannel &channel);
+
     /*!
      * \brief Emitted when a channel update has failed.
      * \param error A QNetworkReply::NetworkError enum containing more

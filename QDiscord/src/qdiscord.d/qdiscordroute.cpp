@@ -487,6 +487,15 @@ QDiscordRoute QDiscordRoutes::Messages::deleteMessage(const quint64& channel,
 				);
 }
 
+QDiscordRoute QDiscordRoutes::Messages::bulkDeleteMessages(const quint64 &channel)
+{
+    return QDiscordRoute(
+        QDiscordRoute::Method::POST,
+        QDiscordUtilities::endPoints.channels + "/{channel}/messages/bulk-delete",
+        QString::number(channel)
+    );
+}
+
 QDiscordRoute QDiscordRoutes::Messages::getPinnedMessages(
 		const quint64& channel)
 {
