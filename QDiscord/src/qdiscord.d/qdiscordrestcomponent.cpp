@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "qdiscordrestcomponent.hpp"
@@ -22,7 +22,6 @@
 QDiscordRestComponent::QDiscordRestComponent(QObject *parent)
     : QObject(parent)
 {
-    _authentication = "";
     _self = QSharedPointer<QDiscordUser>();
     _loggedIn = false;
 
@@ -38,35 +37,34 @@ QDiscordRestComponent::~QDiscordRestComponent()
 #endif
 }
 
-void QDiscordRestComponent::login(const QString &token, const QDiscordTokenType &tokenType)
+void QDiscordRestComponent::login(const QDiscordToken &token)
 {
 #ifdef QDISCORD_LIBRARY_DEBUG
     qDebug() << this << "verifying token";
 #endif
 
-    if (!_authentication.isEmpty())
+    if (!_authorization.isEmpty())
     {
 #ifdef QDISCORD_LIBRARY_DEBUG
         qDebug() << this << "attempted to verify a token while one is already stored";
 #endif
-
         return;
     }
 
-    _authentication = QDiscordUtilities::convertTokenToType(token, tokenType);
+    _authorization = token;
     doRequest(QDiscordRoutes::Self::login(),
-    [this, token, tokenType](QNetworkReply* reply)
+    [this, token](QNetworkReply* reply)
     {
         if (reply->error() != QNetworkReply::NoError)
         {
-            _authentication.clear();
+            _authorization.clear();
             _loggedIn = false;
             emit loginFailed(reply->error());
             return;
         }
 
         _loggedIn = true;
-        emit tokenVerified(token, tokenType);
+        emit tokenVerified(token);
     });
 }
 
@@ -84,7 +82,7 @@ void QDiscordRestComponent::sendMessage(const QString &content,
     QJsonObject object;
     object["content"] = content;
 
-    if(tts)
+    if (tts)
         object["tts"] = true;
 
     doRequest(object, QDiscordRoutes::Messages::sendMessage(id),
@@ -246,17 +244,24 @@ void QDiscordRestComponent::editMessage(const QString &newContent,
 
 void QDiscordRestComponent::logout()
 {
-    if (_authentication.isEmpty())
+    if (_authorization.isEmpty())
         return;
 
     if (!_loggedIn)
         return;
 
     _self.reset();
+    if (_authorization.type() != QDiscordToken::Type::None)
+    {
+        _authorization.clear();
+        _loggedIn = false;
+        emit loggedOut();
+        return;
+    }
 
     QJsonObject object;
-    object["token"] = _authentication;
-    _authentication = "";
+    object["token"] = _authorization.fullToken();
+    _authorization.clear();
     _loggedIn = false;
 
     doRequest(object, QDiscordRoutes::Self::logout(),
@@ -324,8 +329,7 @@ void QDiscordRestComponent::setChannelName(const QString &name,
     });
 }
 
-void QDiscordRestComponent::setChannelPosition(int position,
-                                               QSharedPointer<QDiscordChannel> channel)
+void QDiscordRestComponent::setChannelPosition(int position, QSharedPointer<QDiscordChannel> channel)
 {
     if (!_loggedIn)
         return;
@@ -336,8 +340,7 @@ void QDiscordRestComponent::setChannelPosition(int position,
     setChannelPosition(position, channel->id());
 }
 
-void QDiscordRestComponent::setChannelPosition(int position,
-                                               const quint64& channelId)
+void QDiscordRestComponent::setChannelPosition(int position, const quint64& channelId)
 {
     if (!_loggedIn)
         return;
@@ -452,8 +455,7 @@ void QDiscordRestComponent::setChannelUserLimit(int limit, QSharedPointer<QDisco
     setChannelUserLimit(limit, channel->id());
 }
 
-void QDiscordRestComponent::setChannelUserLimit(int limit,
-                                                const quint64 &channelId)
+void QDiscordRestComponent::setChannelUserLimit(int limit, const quint64 &channelId)
 {
     if (!_loggedIn)
         return;
@@ -486,8 +488,10 @@ void QDiscordRestComponent::doRequest(const QDiscordRoute &url,
                                       Functor function)
 {
     QNetworkRequest request(QUrl(url.fullUrl()));
-    if (!_authentication.isEmpty())
-        request.setRawHeader("Authorization", _authentication.toUtf8());
+    if (!_authorization.isEmpty())
+    {
+        request.setRawHeader("Authorization", _authorization.fullToken().toUtf8());
+    }
 
     request.setHeader(QNetworkRequest::UserAgentHeader,
                       QDiscordUtilities::userAgent());
@@ -495,37 +499,37 @@ void QDiscordRestComponent::doRequest(const QDiscordRoute &url,
     QNetworkReply *reply = nullptr;
     switch(url.method())
     {
-    case QDiscordRoute::Method::DELETE:
-        reply = _manager.deleteResource(request);
+        case QDiscordRoute::Method::DELETE:
+            reply = _manager.deleteResource(request);
+            break;
+
+        case QDiscordRoute::Method::GET:
+            reply = _manager.get(request);
+            break;
+
+        case QDiscordRoute::Method::PATCH:
+        {
+            QBuffer* buffer = new QBuffer();
+            buffer->open(QBuffer::ReadWrite);
+            request.setHeader(QNetworkRequest::ContentLengthHeader, 0);
+            reply = _manager.sendCustomRequest(request, "PATCH", buffer);
+            connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
+        }
         break;
 
-    case QDiscordRoute::Method::GET:
-        reply = _manager.get(request);
-        break;
+        case QDiscordRoute::Method::POST:
+            request.setHeader(QNetworkRequest::ContentLengthHeader, 0);
+            reply = _manager.post(request, "");
+            break;
 
-    case QDiscordRoute::Method::PATCH:
-    {
-        QBuffer* buffer = new QBuffer();
-        buffer->open(QBuffer::ReadWrite);
-        request.setHeader(QNetworkRequest::ContentLengthHeader, 0);
-        reply = _manager.sendCustomRequest(request, "PATCH", buffer);
-        connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
-    }
-        break;
+        case QDiscordRoute::Method::PUT:
+            request.setHeader(QNetworkRequest::ContentLengthHeader, 0);
+            reply = _manager.put(request, "");
+            break;
 
-    case QDiscordRoute::Method::POST:
-        request.setHeader(QNetworkRequest::ContentLengthHeader, 0);
-        reply = _manager.post(request, "");
-        break;
-
-    case QDiscordRoute::Method::PUT:
-        request.setHeader(QNetworkRequest::ContentLengthHeader, 0);
-        reply = _manager.put(request, "");
-        break;
-
-    default:
-        return;
-        break;
+        default:
+            return;
+            break;
     }
 
     connect(reply, &QNetworkReply::finished, this, [this, function]() {
@@ -550,8 +554,10 @@ void QDiscordRestComponent::doRequest(const QJsonObject &object,
                                       Functor function)
 {
     QNetworkRequest request(QUrl(url.fullUrl()));
-    if (!_authentication.isEmpty())
-        request.setRawHeader("Authorization", _authentication.toUtf8());
+    if (!_authorization.isEmpty())
+    {
+        request.setRawHeader("Authorization", _authorization.fullToken().toUtf8());
+    }
 
     request.setHeader(QNetworkRequest::UserAgentHeader,
                       QDiscordUtilities::userAgent());
@@ -561,39 +567,40 @@ void QDiscordRestComponent::doRequest(const QJsonObject &object,
     QJsonDocument document;
     switch(url.method())
     {
-    case QDiscordRoute::Method::DELETE:
-        reply = _manager.deleteResource(request);
+        case QDiscordRoute::Method::DELETE:
+            reply = _manager.deleteResource(request);
+            break;
+
+        case QDiscordRoute::Method::GET:
+            reply = _manager.get(request);
+            break;
+
+        case QDiscordRoute::Method::PATCH:
+        {
+            QBuffer* buffer = new QBuffer();
+            buffer->open(QBuffer::ReadWrite);
+
+            document.setObject(object);
+            buffer->write(document.toJson(QJsonDocument::Compact));
+            buffer->seek(0);
+            reply = _manager.sendCustomRequest(request, "PATCH", buffer);
+            connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
+        }
         break;
 
-    case QDiscordRoute::Method::GET:
-        reply = _manager.get(request);
-        break;
+        case QDiscordRoute::Method::POST:
+            document.setObject(object);
+            reply = _manager.post(request, document.toJson(QJsonDocument::Compact));
+            break;
 
-    case QDiscordRoute::Method::PATCH:
-    {
-        QBuffer* buffer = new QBuffer();
-        buffer->open(QBuffer::ReadWrite);
+        case QDiscordRoute::Method::PUT:
+            document.setObject(object);
+            reply = _manager.put(request, document.toJson(QJsonDocument::Compact));
+            break;
 
-        document.setObject(object);
-        buffer->write(document.toJson(QJsonDocument::Compact));
-        buffer->seek(0);
-        reply = _manager.sendCustomRequest(request, "PATCH", buffer);
-        connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
-    }
-        break;
-
-    case QDiscordRoute::Method::POST:
-        document.setObject(object);
-        reply = _manager.post(request, document.toJson(QJsonDocument::Compact));
-        break;
-
-    case QDiscordRoute::Method::PUT:
-        document.setObject(object);
-        reply = _manager.put(request, document.toJson(QJsonDocument::Compact));
-        break;
-
-    default:
-        return;
+        default:
+            return;
+            break;
     }
 
     connect(reply, &QNetworkReply::finished, this, [this, function]() {
@@ -618,8 +625,10 @@ void QDiscordRestComponent::doRequest(const QJsonArray &array,
                                       Functor function)
 {
     QNetworkRequest request(QUrl(url.fullUrl()));
-    if (!_authentication.isEmpty())
-        request.setRawHeader("Authorization", _authentication.toUtf8());
+    if (!_authorization.isEmpty())
+    {
+        request.setRawHeader("Authorization", _authorization.fullToken().toUtf8());
+    }
 
     request.setHeader(QNetworkRequest::UserAgentHeader,
                       QDiscordUtilities::userAgent());
@@ -629,38 +638,39 @@ void QDiscordRestComponent::doRequest(const QJsonArray &array,
     QJsonDocument document;
     switch(url.method())
     {
-    case QDiscordRoute::Method::DELETE:
-        reply = _manager.deleteResource(request);
+        case QDiscordRoute::Method::DELETE:
+            reply = _manager.deleteResource(request);
+            break;
+
+        case QDiscordRoute::Method::GET:
+            reply = _manager.get(request);
+            break;
+
+        case QDiscordRoute::Method::PATCH:
+        {
+            QBuffer* buffer = new QBuffer();
+            buffer->open(QBuffer::ReadWrite);
+            document.setArray(array);
+            buffer->write(document.toJson(QJsonDocument::Compact));
+            buffer->seek(0);
+            reply = _manager.sendCustomRequest(request, "PATCH", buffer);
+            connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
+        }
         break;
 
-    case QDiscordRoute::Method::GET:
-        reply = _manager.get(request);
-        break;
+        case QDiscordRoute::Method::POST:
+            document.setArray(array);
+            reply = _manager.post(request, document.toJson(QJsonDocument::Compact));
+            break;
 
-    case QDiscordRoute::Method::PATCH:
-    {
-        QBuffer* buffer = new QBuffer();
-        buffer->open(QBuffer::ReadWrite);
-        document.setArray(array);
-        buffer->write(document.toJson(QJsonDocument::Compact));
-        buffer->seek(0);
-        reply = _manager.sendCustomRequest(request, "PATCH", buffer);
-        connect(reply, &QNetworkReply::finished, buffer, &QBuffer::deleteLater);
-    }
-        break;
+        case QDiscordRoute::Method::PUT:
+            document.setArray(array);
+            reply = _manager.put(request, document.toJson(QJsonDocument::Compact));
+            break;
 
-    case QDiscordRoute::Method::POST:
-        document.setArray(array);
-        reply = _manager.post(request, document.toJson(QJsonDocument::Compact));
-        break;
-
-    case QDiscordRoute::Method::PUT:
-        document.setArray(array);
-        reply = _manager.put(request, document.toJson(QJsonDocument::Compact));
-        break;
-
-    default:
-        return;
+        default:
+            return;
+            break;
     }
     connect(reply, &QNetworkReply::finished, this, [this, function]() {
         QNetworkReply* rply = static_cast<QNetworkReply*>(sender());

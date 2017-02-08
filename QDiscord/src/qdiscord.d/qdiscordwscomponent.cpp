@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "qdiscordwscomponent.hpp"
@@ -55,11 +55,9 @@ QDiscordWsComponent::~QDiscordWsComponent()
 #endif
 }
 
-void QDiscordWsComponent::connectToEndpoint(const QString &endpoint,
-                                            const QString &token,
-                                            const QDiscordTokenType &tokenType)
+void QDiscordWsComponent::connectToEndpoint(const QString &endpoint, const QDiscordToken &token)
 {
-        if (!_token.isEmpty())
+    if (!_token.isEmpty())
     {
 #ifdef QDISCORD_LIBRARY_DEBUG
         qDebug() << this << "connect requested while already in a connected/connecting state";
@@ -67,11 +65,10 @@ void QDiscordWsComponent::connectToEndpoint(const QString &endpoint,
         return;
     }
 
-    if(_reconnectTimer.isActive())
+    if (_reconnectTimer.isActive())
         _reconnectTimer.stop();
     _gateway = endpoint;
     _token = token;
-    _tokenType = tokenType;
     _socket.open(endpoint);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
@@ -96,10 +93,10 @@ void QDiscordWsComponent::close()
 
 void QDiscordWsComponent::setStatus(bool idle, const QDiscordGame &game)
 {
-    if(_token.isEmpty())
+    if (_token.isEmpty())
         return;
 
-    if(_gateway.isEmpty())
+    if (_gateway.isEmpty())
         return;
 
     QJsonDocument document;
@@ -127,8 +124,7 @@ void QDiscordWsComponent::setStatus(bool idle, const QDiscordGame &game)
     _socket.sendTextMessage(document.toJson(QJsonDocument::Compact));
 }
 
-void QDiscordWsComponent::login(const QString &token,
-                                const QDiscordTokenType &tokenType)
+void QDiscordWsComponent::login(const QDiscordToken &token)
 {
     if (_reconnectTimer.isActive())
         _reconnectTimer.stop();
@@ -137,16 +133,16 @@ void QDiscordWsComponent::login(const QString &token,
     QJsonObject mainObject;
     mainObject["op"] = 2;
     QJsonObject dataObject;
-    dataObject["token"] = QDiscordUtilities::convertTokenToType(token, tokenType);
+    dataObject["token"] = token.fullToken();
     dataObject["v"] = 5;
     dataObject["properties"] =
-            QJsonObject({
-                            {"$os", QSysInfo::kernelType()},
-                            {"$browser", QDiscordUtilities::libName},
-                            {"$device", QDiscordUtilities::libName},
-                            {"$referrer", "https://discordapp.com/@me"},
-                            {"$referring_domain", "discordapp.com"}
-                        });
+        QJsonObject({
+            {"$os", QSysInfo::kernelType()},
+            {"$browser", QDiscordUtilities::libName},
+            {"$device", QDiscordUtilities::libName},
+            {"$referrer", "https://discordapp.com/@me"},
+            {"$referring_domain", "discordapp.com"}
+        });
     dataObject["large_threshold"] = 100;
     dataObject["compress"] = false;
     mainObject["d"] = dataObject;
@@ -197,7 +193,7 @@ void QDiscordWsComponent::connected_()
         _reconnectTimer.stop();
 
     emit connected();
-    login(_token, _tokenType);
+    login(_token);
 
 #ifdef QDISCORD_LIBRARY_DEBUG
     qDebug() << this << "connected, logging in";
@@ -260,7 +256,7 @@ void QDiscordWsComponent::textMessageReceived(const QString &message)
     }
 
 #ifdef QDISCORD_LIBRARY_DEBUG
-        qDebug() << this << "op:" << object["op"].toInt() << " t:" << object["t"].toString();
+    qDebug() << this << "op:" << object["op"].toInt() << " t:" << object["t"].toString();
 #endif
 
     switch(object["op"].toInt(-1))

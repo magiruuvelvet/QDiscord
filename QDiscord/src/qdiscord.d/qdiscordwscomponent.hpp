@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef QDISCORDWSCOMPONENT_HPP
@@ -29,6 +29,7 @@
 #include <functional>
 #include "qdiscordgame.hpp"
 #include "qdiscordutilities.hpp"
+#include "qdiscordtoken.hpp"
 
 /*!
  * \brief The WebSocket component of QDiscord.
@@ -49,11 +50,8 @@ public:
      * \param endpoint The URL to the endpoint the WebSocket should connect to.
      * \param token The token the WebSocket should use to authenticate itself
      * once it connects.
-     * \param tokenType Specifies the type of the provided token.
      */
-    void connectToEndpoint(const QString &endpoint,
-                           const QString &token,
-                           const QDiscordTokenType &tokenType);
+    void connectToEndpoint(const QString &endpoint, const QDiscordToken &token);
 
     ///\brief Makes the WebSocket disconnect from the endpoint.
     void close();
@@ -167,7 +165,7 @@ signals:
     void channelUpdateReceived(const QJsonObject &object);
 
 private:
-    void login(const QString &token, const QDiscordTokenType &tokenType);
+    void login(const QDiscordToken &token);
     void reconnect();
     void connected_();
     void disconnected_();
@@ -183,8 +181,7 @@ private:
     QTimer _heartbeatTimer;
     QTimer _reconnectTimer;
     QString _gateway;
-    QString _token;
-    QDiscordTokenType _tokenType;
+    QDiscordToken _token;
     //   Type   , Handler function
     QMap<QString, std::function<void (const QJsonObject&)>> _eventDispatchTable;
     QWebSocket _socket;

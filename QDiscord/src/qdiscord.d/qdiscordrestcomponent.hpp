@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef QDISCORDRESTCOMPONENT_HPP
@@ -29,6 +29,7 @@
 #include "qdiscordchannel.hpp"
 #include "qdiscorduser.hpp"
 #include "qdiscordroute.hpp"
+#include "qdiscordtoken.hpp"
 
 /*!
  * \brief The REST component of QDiscord.
@@ -51,7 +52,7 @@ public:
      * \param token The token to use.
      * \param tokenType Specifies the type of the provided token.
      */
-    void login(const QString &token, const QDiscordTokenType &tokenType = QDiscordTokenType::Bot);
+    void login(const QDiscordToken &token);
 
     /*!
      * \brief Sends a message to the specified channel.
@@ -120,8 +121,7 @@ public:
      * \brief Changes the position of the specified text channel on the channel
      * list.
      */
-    void setChannelPosition(int position,
-                            QSharedPointer<QDiscordChannel> channel);
+    void setChannelPosition(int position, QSharedPointer<QDiscordChannel> channel);
 
     /*!
      * \brief Changes the position of the text channel with the specified ID on
@@ -144,8 +144,7 @@ public:
     void setChannelBitrate(int bitrate, const quint64 &channelId);
 
     ///\brief Changes the user limit on the specified voice channel.
-    void setChannelUserLimit(int limit,
-                             QSharedPointer<QDiscordChannel> channel);
+    void setChannelUserLimit(int limit, QSharedPointer<QDiscordChannel> channel);
 
     ///\brief Changes the user limit of the voice channel with the specified ID.
     void setChannelUserLimit(int limit, const quint64 &channelId);
@@ -176,7 +175,7 @@ signals:
      * \brief Emitted when the token acquired when logging in has been verified
      * to be correct.
      */
-    void tokenVerified(const QString &token, const QDiscordTokenType &tokenType);
+    void tokenVerified(const QDiscordToken &token);
 
     /*!
      * \brief Emitted when logging in has failed.
@@ -248,7 +247,7 @@ private:
                    Functor function);
 
     QSharedPointer<QDiscordUser> _self;
-    QString _authentication;
+    QDiscordToken _authorization;
     QNetworkAccessManager _manager;
     bool _loggedIn;
 };

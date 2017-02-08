@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef QDISCORD_HPP
@@ -65,10 +65,9 @@ public:
      * components, in which case it is recommended to not call this and instead
      * log in manually.
      * \param token The token to use.
-     * \param tokenType Specifies the type of the provided token.
-     * \see QDiscordTokenType
+     * \see QDiscordToken
      */
-    void login(const QString &token, const QDiscordTokenType &tokenType = QDiscordTokenType::Bot);
+    void login(const QDiscordToken &token);
 
     /*!
      * \brief Handles logging out of the Discord API and destroying any state
@@ -98,10 +97,13 @@ public:
     QDiscordStateComponent *state() { return &_state; }
 
     ///\brief Returns whether %QDiscord is connected.
-    const bool &isConnected() { return _connected; }
+    bool isConnected() const { return _connectionStatus == ConnectionStatus::Connected; }
 
     ///\brief Returns whether %QDiscord is currently connecting.
-    const bool &isConnecting() { return _connecting; }
+    bool isConnecting() const;
+
+    ///\brief Returns whether %QDiscord is currently disconnected.
+    bool isDisconnected() const { return _connectionStatus == ConnectionStatus::Disconnected; }
 
 signals:
     /*!
@@ -128,7 +130,7 @@ signals:
     void disconnected();
 
 private:
-    void tokenVerfified(const QString &token, const QDiscordTokenType &tokenType);
+    void tokenVerfified(const QDiscordToken &token);
     void endpointAcquired(const QString &endpoint);
     void connectComponents();
     void connectDiscordSignals();
@@ -136,14 +138,14 @@ private:
     void logoutFinished();
     void loginSuccessRecevied();
     void loginFailedReceived();
-    QString _token;
-    QDiscordTokenType _tokenType;
+    QDiscordToken _token;
     QDiscordRestComponent _rest;
     QDiscordWsComponent _ws;
     QDiscordStateComponent _state;
     bool _signalsConnected;
-    bool _connecting;
-    bool _connected;
+    enum class ConnectionStatus {
+        Disconnected, TokenVerifying, WsConnecting, Connected
+    } _connectionStatus;
 };
 
 #endif // QDISCORD_HPP

@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "qdiscordutilities.hpp"
@@ -73,30 +73,30 @@ QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkError erro
 {
     switch(static_cast<quint16>(error))
     {
-    case 200:
-        return "200 (OK): The response completed successfully.";
-    case 201:
-        return "200 (CREATED): The entity was created successfully.";
-    case 304:
-        return "304 (NOT MODIFIED): The entity was not modified (no action was taken).";
-    case 400:
-        return "400 (BAD REQUEST): The request was improperly formatted, or the server couldn't understand it.";
-    case 401:
-        return "401 (UNAUTHORIZED): The Authorization header was missing or invalid.";
-    case 403:
-        return "403 (FORBIDDEN): The Authorization token you passed did not have permission to the resource";
-    case 404:
-        return "404 (NOT FOUND): The resource at the location specified doesn't exist.";
-    case 405:
-        return "405 (METHOD NOT ALLOWED): The HTTP method used is not valid for the location specified.";
-    case 429:
-        return "429 (TOO MANY REQUESTS): You've made too many requests.";
-    case 502:
-        return "502 (GATEWAY UNAVAILABLE): There was not a gateway available to process your request. Wait a bit and retry.";
-    default:
-        if (static_cast<quint16>(error) > 499 && static_cast<quint16>(error) < 600)
-            return "5xx (SERVER ERROR): The server had an error processing your request.";
-        else return "xxx (UNKNOWN): Unknown error.";
+        case 200:
+            return "200 (OK): The response completed successfully.";
+        case 201:
+            return "200 (CREATED): The entity was created successfully.";
+        case 304:
+            return "304 (NOT MODIFIED): The entity was not modified (no action was taken).";
+        case 400:
+            return "400 (BAD REQUEST): The request was improperly formatted, or the server couldn't understand it.";
+        case 401:
+            return "401 (UNAUTHORIZED): The Authorization header was missing or invalid.";
+        case 403:
+            return "403 (FORBIDDEN): The Authorization token you passed did not have permission to the resource";
+        case 404:
+            return "404 (NOT FOUND): The resource at the location specified doesn't exist.";
+        case 405:
+            return "405 (METHOD NOT ALLOWED): The HTTP method used is not valid for the location specified.";
+        case 429:
+            return "429 (TOO MANY REQUESTS): You've made too many requests.";
+        case 502:
+            return "502 (GATEWAY UNAVAILABLE): There was not a gateway available to process your request. Wait a bit and retry.";
+        default:
+            if (static_cast<quint16>(error) > 499 && static_cast<quint16>(error) < 600)
+                return "5xx (SERVER ERROR): The server had an error processing your request.";
+            else return "xxx (UNKNOWN): Unknown error.";
     }
 }
 
@@ -116,22 +116,8 @@ QDateTime QDiscordUtilities::snowflakeTime(const quint64 &snowflake)
     );
 }
 
-QString QDiscordUtilities::convertTokenToType(const QString &token,
-                                              const QDiscordTokenType &tokenType)
-{
-    switch (tokenType)
-    {
-    case QDiscordTokenType::Bot:
-        return "Bot " + token;
-    case QDiscordTokenType::Bearer:
-        return "Bearer " + token;
-    default:
-        return token;
-    }
-}
-
 QString QDiscordUtilities::userAgent()
 {
     return "DiscordBot (" + libLink + ", v" +
-            libMajor + ":" + libMinor + "); " + botName;
+    libMajor + ":" + libMinor + "); " + botName;
 }

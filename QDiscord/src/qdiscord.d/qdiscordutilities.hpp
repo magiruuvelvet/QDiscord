@@ -9,11 +9,11 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.     See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.     If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef QDISCORDUTILITIES_HPP
@@ -22,7 +22,6 @@
 #include <QString>
 #include <QNetworkReply>
 #include <QDateTime>
-#include "qdiscordtokentype.hpp"
 
 /*!
  * \brief A namespace containing configuration variables and functions used in
@@ -61,9 +60,6 @@ namespace QDiscordUtilities
     ///\brief Returns the DateTime a Discord snowflake was generated.
     QDateTime snowflakeTime(const QString &snowflake);
     QDateTime snowflakeTime(const quint64 &snowflake);
-
-    ///\brief Converts the specified token to a token of type `tokenType`
-    QString convertTokenToType(const QString &token, const QDiscordTokenType &tokenType);
 
     ///\brief Generates a user-agent from the information in this namespace.
     QString userAgent();
