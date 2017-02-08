@@ -114,7 +114,7 @@ void QDiscordRestComponent::sendMessage(const QString& content,
 	if(!channel)
 		return;
 
-	QString id = channel->id();
+        quint64 id = channel->id();
 	QJsonObject object;
 	object["content"] = content;
 
@@ -137,7 +137,7 @@ void QDiscordRestComponent::sendMessage(const QString& content,
 }
 
 void QDiscordRestComponent::sendMessage(const QString& content,
-										const QString& channelId,
+										const quint64& channelId,
 										bool tts)
 {
 	if(!_loggedIn)
@@ -169,8 +169,8 @@ void QDiscordRestComponent::deleteMessage(QDiscordMessage message)
 	deleteMessage(message.channelId(), message.id());
 }
 
-void QDiscordRestComponent::deleteMessage(const QString& channelId,
-										  const QString& messageId)
+void QDiscordRestComponent::deleteMessage(const quint64& channelId,
+										  const quint64& messageId)
 {
 	if(!_loggedIn)
 		return;
@@ -194,8 +194,8 @@ void QDiscordRestComponent::editMessage(const QString& newContent,
 }
 
 void QDiscordRestComponent::editMessage(const QString& newContent,
-										const QString& channelId,
-										const QString& messageId)
+                                                                                const quint64& channelId,
+                                                                                const quint64& messageId)
 {
 	if(!_loggedIn)
 		return;
@@ -271,7 +271,7 @@ QDiscordRestComponent::setChannelName(const QString& name,
 }
 
 void QDiscordRestComponent::setChannelName(const QString& name,
-										   const QString& channelId)
+                                                                                   const quint64& channelId)
 {
 	if(!_loggedIn)
 		return;
@@ -309,7 +309,7 @@ void QDiscordRestComponent::setChannelPosition(
 }
 
 void QDiscordRestComponent::setChannelPosition(int position,
-											   const QString& channelId)
+                                                                                           const quint64& channelId)
 {
 	if(!_loggedIn)
 		return;
@@ -350,7 +350,7 @@ void QDiscordRestComponent::setChannelTopic(
 }
 
 void QDiscordRestComponent::setChannelTopic(const QString& topic,
-											const QString& channelId)
+                                                                                        const quint64& channelId)
 {
 	if(!_loggedIn)
 		return;
@@ -391,7 +391,7 @@ void QDiscordRestComponent::setChannelBitrate(
 }
 
 void QDiscordRestComponent::setChannelBitrate(int bitrate,
-											  const QString& channelId)
+                                                                                          const quint64& channelId)
 {
 	if(!_loggedIn)
 		return;
@@ -432,7 +432,7 @@ void QDiscordRestComponent::setChannelUserLimit(
 }
 
 void QDiscordRestComponent::setChannelUserLimit(int limit,
-												const QString& channelId)
+                                                                                                const quint64& channelId)
 {
 	if(!_loggedIn)
 		return;

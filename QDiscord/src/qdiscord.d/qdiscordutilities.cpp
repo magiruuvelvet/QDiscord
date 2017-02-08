@@ -77,7 +77,7 @@ QString QDiscordUtilities::networkErrorToString(QNetworkReply::NetworkError erro
 	switch((int)error)
 	{
 	case 200:
-		return "200 (OK): The response completed sucessfully.";
+		return "200 (OK): The response completed successfully.";
 	case 201:
 		return "200 (CREATED): The entity was created successfully.";
 	case 304:

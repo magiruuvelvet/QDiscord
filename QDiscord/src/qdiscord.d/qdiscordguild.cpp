@@ -21,7 +21,7 @@
 
 QDiscordGuild::QDiscordGuild(const QJsonObject& object)
 {
-	_id = object["id"].toString("");
+	_id = object["id"].toString("0").toULongLong();
 	_unavailable = object["unavailable"].toBool(false);
 	_name = object["name"].toString("");
 	_verificationLevel = object["verification_level"].toInt(0);
@@ -77,7 +77,7 @@ QDiscordGuild::QDiscordGuild(const QDiscordGuild& other):
 
 QDiscordGuild::QDiscordGuild()
 {
-	_id = "";
+	_id = 0ULL;
 	_unavailable = false;
 	_name = "";
 	_verificationLevel = 0;
@@ -118,7 +118,7 @@ void QDiscordGuild::addMember(QSharedPointer<QDiscordMember> member)
 {
 	if(!member)
 		return;
-	_members.insert(member->user()->id(), member);
+        _members.insert(member->user()->id(), member);
 }
 
 bool QDiscordGuild::removeMember(QSharedPointer<QDiscordMember> member)

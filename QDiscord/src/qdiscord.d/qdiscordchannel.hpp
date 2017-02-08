@@ -56,7 +56,7 @@ public:
 		Voice, Text, UnknownType
 	};
 	///\brief Returns the channel's ID.
-	QString id() const {return _id;}
+	quint64 id() const {return _id;}
 	///\brief Returns the channel's name.
 	QString name() const {return _name;}
 	///\brief Returns the channel's position in the channel list.
@@ -76,7 +76,7 @@ public:
 	 */
 	bool isPrivate() const {return _isPrivate;}
 	///\brief Returns the ID of the last sent message.
-	QString lastMessageId() const {return _lastMessageId;}
+	quint64 lastMessageId() const {return _lastMessageId;}
 	///\brief Returns a pointer to this channel's parent guild.
 	QSharedPointer<QDiscordGuild> guild() const {return _guild;}
 	/*!
@@ -105,19 +105,19 @@ public:
 	 */
 	void setGuild(QSharedPointer<QDiscordGuild> guild) {_guild = guild;}
 	///\brief Returns a string which allows you to mention this channel.
-	QString mention() const {return QString("<#"+_id+">");}
+	QString mention() const {return QString("<#"+QString::number(_id)+">");}
 	///\brief Compares two channels based on their ID.
 	bool operator ==(const QDiscordChannel& other) const;
 	///\brief Compares two channels based on their ID.
 	bool operator !=(const QDiscordChannel& other) const;
 private:
-	QString _id;
+	quint64 _id;
 	QString _name;
 	int _position;
 	QString _topic;
 	ChannelType _type;
 	bool _isPrivate;
-	QString _lastMessageId;
+	quint64 _lastMessageId;
 	int _bitrate;
 	int _userLimit;
 	QDateTime _lastPinTimestamp;

@@ -21,11 +21,11 @@
 QDiscordMessage::QDiscordMessage(const QJsonObject& object,
 								 QSharedPointer<QDiscordChannel> channel)
 {
-	_id = object["id"].toString("");
+	_id = object["id"].toString("0").toULongLong();
 	_mentionEveryone = object["mention_everyone"].toBool(false);
 	_content = object["content"].toString("");
 	_channel = channel;
-	_channelId = object["channel_id"].toString("");
+	_channelId = object["channel_id"].toString("0").toULongLong();
 	_author = object.contains("author") ?
 				QSharedPointer<QDiscordUser>(
 					new QDiscordUser(object["author"].toObject())
@@ -38,7 +38,7 @@ QDiscordMessage::QDiscordMessage(const QJsonObject& object,
 		if(guild())
 		{
 			QSharedPointer<QDiscordMember> member =
-					guild()->member(item.toObject()["id"].toString(""));
+					guild()->member(item.toObject()["id"].toString("0").toULongLong());
 			if(member && member->user())
 			{
 				_mentions.removeAll(member->user());
@@ -66,12 +66,12 @@ QDiscordMessage::QDiscordMessage(const QJsonObject& object,
 
 QDiscordMessage::QDiscordMessage()
 {
-	_id = "";
+	_id = 0ULL;
 	_mentionEveryone = false;
 	_content = "";
 	_author = QSharedPointer<QDiscordUser>();
 	_channel = QSharedPointer<QDiscordChannel>();
-	_channelId = "";
+	_channelId = 0ULL;
 	_tts = false;
 	_timestamp = QDateTime();
 

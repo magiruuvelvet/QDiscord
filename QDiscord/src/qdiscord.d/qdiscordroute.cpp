@@ -69,11 +69,11 @@ QDiscordRoute QDiscordRoutes::Self::getGuilds()
 						 QDiscordUtilities::endPoints.me + "/guilds");
 }
 
-QDiscordRoute QDiscordRoutes::Self::leaveGuild(const QString& guild)
+QDiscordRoute QDiscordRoutes::Self::leaveGuild(const quint64& guild)
 {
 	return QDiscordRoute(QDiscordRoute::Method::DELETE,
 						 QDiscordUtilities::endPoints.me + "/guilds/{guildm}",
-						 guild);
+                                                 QString::number(guild));
 }
 
 QDiscordRoute QDiscordRoutes::Self::getPrivateChannels()
@@ -113,151 +113,151 @@ QDiscordRoute QDiscordRoutes::Self::logout()
 }
 
 // Users
-QDiscordRoute QDiscordRoutes::Users::getUser(const QString& user)
+QDiscordRoute QDiscordRoutes::Users::getUser(const quint64& user)
 {
 	return QDiscordRoute(QDiscordRoute::Method::GET,
 						 QDiscordUtilities::endPoints.users + "/{user}",
-						 user);
+                                                 QString::number(user));
 }
 
 // Guilds
-QDiscordRoute QDiscordRoutes::Guilds::getGuild(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::getGuild(const quint64& guild)
 {
 	return QDiscordRoute(QDiscordRoute::Method::GET,
 						 QDiscordUtilities::endPoints.guilds + "/{guild}",
-						 guild);
+                                                 QString::number(guild));
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::modifyGuild(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::modifyGuild(const quint64& guild)
 {
 	return QDiscordRoute(QDiscordRoute::Method::PATCH,
 						 QDiscordUtilities::endPoints.guilds + "/{guild}",
-						 guild);
+                                                 QString::number(guild));
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::createChannel(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::createChannel(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/channels",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::getChannels(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::getChannels(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/channels",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::modifyChannels(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::modifyChannels(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/channels",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::getBans(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::getBans(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/bans",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::ban(const QString& guild,
-										  const QString& user)
+QDiscordRoute QDiscordRoutes::Guilds::ban(const quint64& guild,
+                                          const quint64& user)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PUT,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/bans/{user}",
-				guild,
-				user
+                                QString::number(guild),
+                                QString::number(user)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::banWithDelete(const QString& guild,
-													const QString& user,
+QDiscordRoute QDiscordRoutes::Guilds::banWithDelete(const quint64& guild,
+                                                    const quint64& user,
 													int days)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PUT,
 				QDiscordUtilities::endPoints.guilds +
 					"/{guild}/bans/{user}?delete-message-days={days}",
-				guild,
-				user,
+                                QString::number(guild),
+                                QString::number(user),
 				QString::number(days)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::unban(const QString& guild,
-											const QString& user)
+QDiscordRoute QDiscordRoutes::Guilds::unban(const quint64& guild,
+                                            const quint64& user)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/bans/{user}",
-				guild,
-				user
+                                QString::number(guild),
+                                QString::number(user)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::kickMember(const QString& guild,
-												 const QString& user)
+QDiscordRoute QDiscordRoutes::Guilds::kickMember(const quint64& guild,
+                                                 const quint64& user)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/members/{user}",
-				guild,
-				user
+                                QString::number(guild),
+                                QString::number(user)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::modifyMember(const QString& guild,
-												   const QString& user)
+QDiscordRoute QDiscordRoutes::Guilds::modifyMember(const quint64& guild,
+                                                   const quint64& user)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/members/{user}",
-				guild,
-				user
+                                QString::number(guild),
+                                QString::number(user)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::modifySelfNick(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::modifySelfNick(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/@me/nick",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::prunableCount(const QString& guild,
+QDiscordRoute QDiscordRoutes::Guilds::prunableCount(const quint64& guild,
 													int days)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.guilds +
 					"/{guild}/prune?days={days}",
-				guild,
+                                QString::number(guild),
 				QString::number(days)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::pruneMembers(const QString& guild,
+QDiscordRoute QDiscordRoutes::Guilds::pruneMembers(const quint64& guild,
 												   int days)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.guilds +
 					"/{guild}/prune?days={days}",
-				guild,
+                                QString::number(guild),
 				QString::number(days)
 				);
 }
@@ -268,309 +268,309 @@ QDiscordRoute QDiscordRoutes::Guilds::createGuild()
 						 QDiscordUtilities::endPoints.guilds);
 }
 
-QDiscordRoute QDiscordRoutes::Guilds::deleteGuild(const QString& guild)
+QDiscordRoute QDiscordRoutes::Guilds::deleteGuild(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.guilds + "/{guildm}/delete",
-				guild
+                                QString::number(guild)
 				);
 }
 
 // Emotes
-QDiscordRoute QDiscordRoutes::Emotes::modifyEmote(const QString& guild,
-												  const QString& emote)
+QDiscordRoute QDiscordRoutes::Emotes::modifyEmote(const quint64& guild,
+                                                                                                  const quint64& emote)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.guilds +
 					"/{guildm}/emojis/{emote}",
-				guild,
-				emote
+                                QString::number(guild),
+                                QString::number(emote)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Emotes::deleteEmote(const QString& guild,
-												  const QString& emote)
+QDiscordRoute QDiscordRoutes::Emotes::deleteEmote(const quint64& guild,
+                                                                                                  const quint64& emote)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.guilds +
 					"/{guildm}/emojis/{emote}",
-				guild,
-				emote
+                                QString::number(guild),
+                                QString::number(emote)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Emotes::createEmote(const QString& guild)
+QDiscordRoute QDiscordRoutes::Emotes::createEmote(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.guilds + "/{guildm}/emojis",
-				guild
+                                QString::number(guild)
 				);
 }
 
 // Roles
-QDiscordRoute QDiscordRoutes::Roles::getRoles(const QString& guild)
+QDiscordRoute QDiscordRoutes::Roles::getRoles(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/roles",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Roles::createRole(const QString& guild)
+QDiscordRoute QDiscordRoutes::Roles::createRole(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/roles",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Roles::getRole(const QString& guild,
-											 const QString& role)
+QDiscordRoute QDiscordRoutes::Roles::getRole(const quint64& guild,
+                                             const quint64& role)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/roles/{role}",
-				guild,
-				role
+                                QString::number(guild),
+                                QString::number(role)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Roles::modifyRole(const QString& guild,
-												const QString& role)
+QDiscordRoute QDiscordRoutes::Roles::modifyRole(const quint64& guild,
+                                                const quint64& role)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/roles/{role}",
-				guild,
-				role
+                                QString::number(guild),
+                                QString::number(role)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Roles::deleteRole(const QString& guild,
-												const QString& role)
+QDiscordRoute QDiscordRoutes::Roles::deleteRole(const quint64& guild,
+                                                const quint64& role)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/roles/{role}",
-				guild,
-				role
+                                QString::number(guild),
+                                QString::number(role)
 				);
 }
 
 // Channels
-QDiscordRoute QDiscordRoutes::Channels::deleteChannel(const QString& channel)
+QDiscordRoute QDiscordRoutes::Channels::deleteChannel(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.channels + "/{channelm}",
-				channel
+                                QString::number(channel)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Channels::modifyChannel(const QString& channel)
+QDiscordRoute QDiscordRoutes::Channels::modifyChannel(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.channels + "/{channel}",
-				channel
+                                QString::number(channel)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Channels::sendTyping(const QString& channel)
+QDiscordRoute QDiscordRoutes::Channels::sendTyping(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.channels + "/{channel}/typing",
-				channel
+                                QString::number(channel)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Channels::getPermissions(const QString& channel)
+QDiscordRoute QDiscordRoutes::Channels::getPermissions(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/permissions",
-				channel
+                                QString::number(channel)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Channels::getPermissionsOverride(
-		const QString& channel,
+		const quint64& channel,
 		const QString& permissionsOverride)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/permissions/{permoverride}",
-				channel,
+                                QString::number(channel),
 				permissionsOverride
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Channels::createPermissionsOverride(
-		const QString& channel,
+		const quint64& channel,
 		const QString& permissionsOverride)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PUT,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/permissions/{permoverride}",
-				channel,
+                                QString::number(channel),
 				permissionsOverride
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Channels::modifyPermissionsOverride(
-		const QString& channel,
+		const quint64& channel,
 		const QString& permissionsOverride)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PUT,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/permissions/{permoverride}",
-				channel,
+                                QString::number(channel),
 				permissionsOverride
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Channels::deletePermissionsOverride(
-		const QString& channel,
+		const quint64& channel,
 		const QString& permissionsOverride)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/permissions/{permoverride}",
-				channel,
+                                QString::number(channel),
 				permissionsOverride
 	);
 }
 
 // Messages
-QDiscordRoute QDiscordRoutes::Messages::sendMessage(const QString& channel)
+QDiscordRoute QDiscordRoutes::Messages::sendMessage(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.channels + "/{channel}/messages",
-				channel
+                                QString::number(channel)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Messages::editMessage(const QString& channel,
-													const QString& message)
+QDiscordRoute QDiscordRoutes::Messages::editMessage(const quint64& channel,
+													const quint64& message)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PATCH,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}",
-				channel,
-				message
+                                QString::number(channel),
+                                QString::number(message)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Messages::deleteMessage(const QString& channel,
-													  const QString& message)
+QDiscordRoute QDiscordRoutes::Messages::deleteMessage(const quint64& channel,
+													  const quint64& message)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}",
-				channel,
-				message
+                                QString::number(channel),
+                                QString::number(message)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getPinnedMessages(
-		const QString& channel)
+		const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/pins",
-				channel
+                                QString::number(channel)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::addPinnedMessage(
-			const QString& channel,
-			const QString& message)
+			const quint64& channel,
+			const quint64& message)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PUT,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/pins/{message}",
-				channel,
-				message
+                                QString::number(channel),
+                                QString::number(message)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::removePinnedMessage(
-			const QString& channel,
-			const QString& message)
+			const quint64& channel,
+			const quint64& message)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/pins/{message}",
-				channel,
-				message
+                                QString::number(channel),
+                                QString::number(message)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Messages::addReaction(const QString& channel,
-													const QString& message,
+QDiscordRoute QDiscordRoutes::Messages::addReaction(const quint64& channel,
+													const quint64& message,
 													const QString& reactionCode)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::PUT,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}/reactions/{reacion}/@me",
-				channel,
-				message,
+                                QString::number(channel),
+                                QString::number(message),
 				reactionCode
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::removeReaction(
-			const QString& channel,
-			const QString& message,
+			const quint64& channel,
+			const quint64& message,
 			const QString& reactionCode,
-			const QString& user)
+			const quint64& user)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}/reactions/{reaction}/{user}",
-				channel,
-				message,
+                                QString::number(channel),
+                                QString::number(message),
 				reactionCode,
-				user
+                                QString::number(user)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::removeAllReactions(
-			const QString& channel,
-			const QString& message)
+			const quint64& channel,
+			const quint64& message)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::DELETE,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}/reactions",
-				channel,
-				message
+                                QString::number(channel),
+                                QString::number(message)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getReactionUsers(
-			const QString& channel,
-			const QString& message,
+			const quint64& channel,
+			const quint64& message,
 			const QString& reactionCode,
 			int limit)
 {
@@ -579,28 +579,28 @@ QDiscordRoute QDiscordRoutes::Messages::getReactionUsers(
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}"
 					"/reactions/{reaction}?limit={limit}",
-				channel,
-				message,
+                                QString::number(channel),
+                                QString::number(message),
 				reactionCode,
 				QString::number(limit)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getMessageHistory(
-			const QString& channel,
+			const quint64& channel,
 			int limit)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages?limit={limit}",
-				channel,
-				limit
+                                QString::number(channel),
+                                QString::number(limit)
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getMessageHistoryBefore(
-			const QString& channel,
+			const quint64& channel,
 			int limit,
 			const QString& before)
 {
@@ -608,14 +608,14 @@ QDiscordRoute QDiscordRoutes::Messages::getMessageHistoryBefore(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages?limit={limit}&before={before}",
-				channel,
+                                QString::number(channel),
 				QString::number(limit),
 				before
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getMessageHistoryAfter(
-			const QString& channel,
+			const quint64& channel,
 			int limit,
 			const QString& after)
 {
@@ -623,14 +623,14 @@ QDiscordRoute QDiscordRoutes::Messages::getMessageHistoryAfter(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages?limit={limit}&after={after}",
-				channel,
+                                QString::number(channel),
 				QString::number(limit),
 				after
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getMessageHistoryAround(
-			const QString& channel,
+			const quint64& channel,
 			int limit,
 			const QString& around)
 {
@@ -638,32 +638,32 @@ QDiscordRoute QDiscordRoutes::Messages::getMessageHistoryAround(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages?limit={limit}&around={around}",
-				channel,
+                                QString::number(channel),
 				QString::number(limit),
 				around
 				);
 }
 
 QDiscordRoute QDiscordRoutes::Messages::getMessage(
-			const QString& channel,
-			const QString& message)
+			const quint64& channel,
+			const quint64& message)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/{message}",
-				channel,
-				message
+                                QString::number(channel),
+                                QString::number(message)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Messages::deleteMessages(const QString& channel)
+QDiscordRoute QDiscordRoutes::Messages::deleteMessages(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.channels +
 					"/{channel}/messages/bulk-delete",
-				channel
+                                QString::number(channel)
 				);
 }
 
@@ -686,30 +686,30 @@ QDiscordRoute QDiscordRoutes::Invites::deleteInvite(const QString& code)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Invites::getGuildInvites(const QString& guild)
+QDiscordRoute QDiscordRoutes::Invites::getGuildInvites(const quint64& guild)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.guilds + "/{guild}/invites",
-				guild
+                                QString::number(guild)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Invites::getChannelInvites(const QString& channel)
+QDiscordRoute QDiscordRoutes::Invites::getChannelInvites(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::GET,
 				QDiscordUtilities::endPoints.channels + "/{channel}/invites",
-				channel
+                                QString::number(channel)
 				);
 }
 
-QDiscordRoute QDiscordRoutes::Invites::createInvite(const QString& channel)
+QDiscordRoute QDiscordRoutes::Invites::createInvite(const quint64& channel)
 {
 	return QDiscordRoute(
 				QDiscordRoute::Method::POST,
 				QDiscordUtilities::endPoints.channels + "/{channel}/invites",
-				channel
+                                QString::number(channel)
 				);
 }
 

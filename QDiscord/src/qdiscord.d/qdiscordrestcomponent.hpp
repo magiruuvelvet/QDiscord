@@ -84,12 +84,12 @@ public:
 	 * \param tts Whether to use text to speech when sending the message.
 	 */
 	void sendMessage(const QString& content,
-					 const QString& channelId,
+					 const quint64& channelId,
 					 bool tts = false);
 	///\brief Deletes the specified message.
 	void deleteMessage(QDiscordMessage message);
 	///\brief Deletes the specified message by ID and channel ID.
-	void deleteMessage(const QString& channelId, const QString& messageId);
+        void deleteMessage(const quint64& channelId, const quint64& messageId);
 	///\brief Edits the specified message to contain the specified content
 	void editMessage(const QString& newContent, QDiscordMessage message);
 	/*!
@@ -97,8 +97,8 @@ public:
 	 * the specified content.
 	 */
 	void editMessage(const QString& newContent,
-					 const QString& channelId,
-					 const QString& messageId);
+					 const quint64& channelId,
+					 const quint64& messageId);
 	///\brief Logs out using the stored token.
 	void logout();
 	/*!
@@ -110,7 +110,7 @@ public:
 	void setChannelName(const QString& name,
 						QSharedPointer<QDiscordChannel> channel);
 	///\brief Changes the name of the channel with specified ID.
-	void setChannelName(const QString& name, const QString& channelId);
+	void setChannelName(const QString& name, const quint64& channelId);
 	/*!
 	 * \brief Changes the position of the specified text channel on the channel
 	 * list.
@@ -121,22 +121,22 @@ public:
 	 * \brief Changes the position of the text channel with the specified ID on
 	 * the channel list.
 	 */
-	void setChannelPosition(int position, const QString& channelId);
+        void setChannelPosition(int position, const quint64& channelId);
 	///\brief Changes the topic of the specified text channel.
 	void setChannelTopic(const QString& topic,
 						 QSharedPointer<QDiscordChannel> channel);
 	///\brief Changes the topic of the text channel with the specified ID.
-	void setChannelTopic(const QString& topic, const QString& channelId);
+        void setChannelTopic(const QString& topic, const quint64& channelId);
 	///\brief Changes the bitrate of the specified voice channel.
 	void setChannelBitrate(int bitrate,
 						   QSharedPointer<QDiscordChannel> channel);
 	///\brief Changes the bitrate of the voice channel with the specified ID.
-	void setChannelBitrate(int bitrate, const QString& channelId);
+        void setChannelBitrate(int bitrate, const quint64& channelId);
 	///\brief Changes the user limit on the specified voice channel.
 	void setChannelUserLimit(int limit,
 							 QSharedPointer<QDiscordChannel> channel);
 	///\brief Changes the user limit of the voice channel with the specified ID.
-	void setChannelUserLimit(int limit, const QString& channelId);
+        void setChannelUserLimit(int limit, const quint64& channelId);
 	///\brief Sets the user belonging to this client.
 	void setSelf(QSharedPointer<QDiscordUser> self);
 signals:
@@ -182,7 +182,7 @@ signals:
 	 */
 	void messageSendFailed(QNetworkReply::NetworkError error);
 	///\brief Emitted when a message has been successfully deleted.
-	void messageDeleted(const QString& messageId);
+        void messageDeleted(const quint64& messageId);
 	/*!
 	 * \brief Emitted when deleting a message has failed.
 	 * \param error A QNetworkReply::NetworkError enum containing more

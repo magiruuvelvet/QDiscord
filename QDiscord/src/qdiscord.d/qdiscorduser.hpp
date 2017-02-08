@@ -36,13 +36,13 @@ public:
 	///\brief Updates the current instance from the provided parameters.
 	void update(const QJsonObject& object);
 	///\brief Returns the user's ID.
-	QString id() const {return _id;}
+	quint64 id() const {return _id;}
 	///\brief Returns the user's avatar string.
 	QString avatar() const {return _avatar;}
 	///\brief Returns whether the user is a bot.
 	bool bot() const {return _bot;}
 	///\brief Returns the user's discriminator.
-	QString discriminator() const {return _discriminator;}
+	quint16 discriminator() const {return _discriminator;}
 	///\brief Returns the user's e-mail, if it can be determined.
 	QString email() const {return _email;}
 	///\brief Returns the user's username.
@@ -53,16 +53,16 @@ public:
 	 * \brief Returns a string which allows you to mention this user using their
 	 * username.
 	 */
-	QString mention() const {return QString("<@"+_id+">");}
+	QString mention() const {return QString("<@"+QString::number(_id)+">");}
 	///\brief Compares two users based on their ID
 	bool operator ==(const QDiscordUser& other) const;
 	///\brief Compares two users based on their ID
 	bool operator !=(const QDiscordUser& other) const;
 private:
-	QString _id;
+	quint64 _id;
 	QString _avatar;
 	bool _bot;
-	QString _discriminator;
+	quint16 _discriminator;
 	QString _email;
 	QString _username;
 	bool _verified;
